@@ -85,7 +85,7 @@ public class ElectricianApp extends Application {
 		Scene mainScene = new Scene(mainScroll);
 
 		try {
-			URL styleURL = getClass().getResource("/toolkit_style.css");
+			URL styleURL = getClass().getResource("toolkit_style.css");
 			String stylePath = styleURL.toExternalForm();
 
 			mainScene.getStylesheets().add(stylePath);
