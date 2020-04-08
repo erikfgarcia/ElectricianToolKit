@@ -56,6 +56,7 @@ public class ElectricianApp extends Application {
 		DropDown circuitsDrop = new DropDown("Circuits");
 
 		Button estimateDrop = new Button("Estimate");
+		estimateDrop.setPrefSize(400, 60);
 		estimateDrop.setOnAction(e -> {
 			EstimateTool.display();
 		});
