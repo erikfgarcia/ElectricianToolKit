@@ -1,1 +1,6 @@
-I'm working on Estimate
+Workload:
+
+-Erik: Estimate
+-Ryan: User Interface
+-Aiesha:
+-Colin:
