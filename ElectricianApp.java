@@ -44,6 +44,7 @@ import java.util.Scanner;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.sql.SQLException;
 
 
 /**
@@ -76,7 +77,9 @@ public class ElectricianApp extends Application {
 		//FilteredDropDown estimateDrop = new FilteredDropDown("Estimates", ui);
 		Button estimateDrop = new Button("Estimate"); //Erik made this change
 		estimateDrop.setPrefSize(400, 60);
-		estimateDrop.setOnAction(e -> { EstimateTool.display(); });
+		estimateDrop.setOnAction(e -> {     //primaryStage.setScene(EstimateTool.scene1);
+		EstimateTool.display(); 
+		 });
 		
 		FilteredDropDown calcDrop = new FilteredDropDown("Calculator", ui);
 		calcDrop.add(new CalculatorTool());

@@ -1,4 +1,8 @@
-
+/**
+ * 
+ * @author Erik F Garcia
+ *
+ */
 public class MaterialList {
 
 	private String name;
