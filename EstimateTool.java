@@ -40,6 +40,8 @@ public class EstimateTool extends ElectricianApp {
 	static Scene scene6;
 	static Scene scene7;
 	static Scene scene8;
+	static Scene scene9;
+	static Scene scene10;
 	static Scene invalid;
 	static int WIDTH = 620; // scene width
 	static int HEIGHT = 590;// scene height
@@ -47,6 +49,7 @@ public class EstimateTool extends ElectricianApp {
 	static int BHEIGHT = 45;// Button height
 	static String STYLE = "/resources/toolkit_style.css";//scene style
 	static List<MaterialList> currentList = new ArrayList<>();
+	static List<String> myLists = new ArrayList<>();
 	static int brCir;
 	static String message = "";
 	static String message2 = "";
@@ -54,9 +57,11 @@ public class EstimateTool extends ElectricianApp {
 	//database
 	static Connection connection = null;
 	static String databaseName = "electrician";
+	static String databaseName2 = "saved";
 	static String url = "jdbc:mysql://localhost:3306/" + databaseName + "?useSSL=false";
+	static String url2 = "jdbc:mysql://localhost:3306/" + databaseName2 + "?useSSL=false";
 	static String username = "root";
-	static String password = "*********";
+	static String password = "4050lsDF.";
 	
 	/**
 	 * 
@@ -91,6 +96,20 @@ public class EstimateTool extends ElectricianApp {
 		bl.setOnAction(e -> {
 			primaryStage.setScene(scene7);
 		});
+		
+		Button saved = new Button("Saved Lists");
+		saved.setPrefSize(BWIDTH, BHEIGHT);
+		saved.setOnAction(e -> {
+			try {
+				if(getTableNames()) {
+					showSavedList();
+				}else
+				    primaryStage.setScene(scene10);
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 
 		Button exit = new Button("Exit");
 		exit.setPrefSize(BWIDTH, BHEIGHT);
@@ -102,7 +121,7 @@ public class EstimateTool extends ElectricianApp {
 		VBox layout1 = new VBox(5);
 		layout1.setAlignment(Pos.CENTER);
 		layout1.getStylesheets().add(STYLE);
-		layout1.getChildren().addAll(menu1, gpc, abc, ic, bl, exit);
+		layout1.getChildren().addAll(menu1, gpc, abc, ic, bl, saved , exit);
 		scene1 = new Scene(layout1, WIDTH, HEIGHT);
 
 		// --------------------------------------------------//
@@ -125,7 +144,7 @@ public class EstimateTool extends ElectricianApp {
 				primaryStage.setScene(invalid);
 			} else {
 				//with database
-				/* try {
+				 try {
 					 if (Integer.parseInt(input1.getText())!=0)
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(input1.getText()));
 					 
@@ -136,9 +155,9 @@ public class EstimateTool extends ElectricianApp {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				 */
+				 
 	//without database				 
-		if (Integer.parseInt(input1.getText())!=0) {		 
+	/*	if (Integer.parseInt(input1.getText())!=0) {		 
 			currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(input1.getText())));
 				 total += 0.9 * Integer.parseInt(input1.getText());
 		}
@@ -146,9 +165,9 @@ public class EstimateTool extends ElectricianApp {
 		if (Integer.parseInt(input2.getText())!=0) {
 			currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(input2.getText())));
 			total += 1.3 * Integer.parseInt(input2.getText());
-		}
+		} */
 				primaryStage.setScene(scene3);			
-			}
+			} 
 		});
 
 		Button back2 = new Button("Back");
@@ -241,7 +260,7 @@ public class EstimateTool extends ElectricianApp {
 
 			} else {
 				//with database
-			/*	try {
+				try {
 					if(Integer.parseInt(recNum1.getText())!=0)
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(recNum1.getText()));
 					
@@ -252,10 +271,10 @@ public class EstimateTool extends ElectricianApp {
 						| ClassNotFoundException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} */
+				} 
 				
 				//without database
-				if (Integer.parseInt(recNum1.getText())!=0) {		 
+			/*	if (Integer.parseInt(recNum1.getText())!=0) {		 
 					currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum1.getText())));
 						 total += 0.9 * Integer.parseInt(recNum1.getText());
 				}
@@ -264,7 +283,7 @@ public class EstimateTool extends ElectricianApp {
 					currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(recNum2.getText())));
 					total += 1.3 * Integer.parseInt(recNum2.getText());
 				}
-				
+				*/
 				
 				try {
 					if (applianceBranchCircuit(Integer.parseInt(recNum1.getText()),
@@ -411,7 +430,7 @@ public class EstimateTool extends ElectricianApp {
 				primaryStage.setScene(invalid);
 			} else {
 				
-				 /*try {
+				 try {
 					 if(Integer.parseInt(recNum5.getText())!=0)
 					 addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(recNum5.getText()));
 					 
@@ -422,11 +441,11 @@ public class EstimateTool extends ElectricianApp {
 						| ClassNotFoundException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} */
+				} 
 				
 				 
 				 //without database
-					if (Integer.parseInt(recNum5.getText())!=0) {		 
+				/*	if (Integer.parseInt(recNum5.getText())!=0) {		 
 						currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum5.getText())));
 							 total += 0.9 * Integer.parseInt(recNum5.getText());
 					}
@@ -434,7 +453,7 @@ public class EstimateTool extends ElectricianApp {
 					if (Integer.parseInt(recNum6.getText())!=0) {
 						currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(recNum5.getText())));
 						total += 1.3 * Integer.parseInt(recNum6.getText());
-					}
+					} */
 				
 				try {
 					if (bathLoundry(Integer.parseInt(recNum5.getText()), Integer.parseInt(recNum6.getText())) == 0) {
@@ -478,6 +497,53 @@ public class EstimateTool extends ElectricianApp {
 		layoutInv.getStylesheets().add(STYLE);
 		layoutInv.getChildren().addAll(exitInv, menuInv);
 		invalid = new Scene(layoutInv, WIDTH, HEIGHT);
+		
+		
+		
+		
+		
+		//---------------------------------------------------------------//
+		//scene 9 saved lists
+		//---------------------------------------------------------------//
+		
+		
+		Label menu9 = new Label("Saved Lists");
+		Button next9 = new Button("Test");// chabge this 
+		next9.setPrefSize(BWIDTH, BHEIGHT);
+		next9.setOnAction(e -> {
+			
+			primaryStage.setScene(scene1);
+			});
+		
+			Button back9 = new Button("Back");
+			back9.setPrefSize(BWIDTH, BHEIGHT);
+			back9.setOnAction(e -> primaryStage.setScene(scene1));
+
+			VBox layout9 = new VBox(5);
+			layout9.setAlignment(Pos.CENTER);
+			layout9.getStylesheets().add(STYLE);
+			layout9.getChildren().addAll(menu9, next9, back9);
+			scene9 = new Scene(layout9, WIDTH, HEIGHT);
+
+			
+			//---------------------------------------------------------------//
+			//scene 10 empty 
+			//---------------------------------------------------------------//
+			
+			
+			Label menu10 = new Label("You have no saved lists");
+			
+				Button back10 = new Button("Back");
+				back9.setPrefSize(BWIDTH, BHEIGHT);
+				back9.setOnAction(e -> primaryStage.setScene(scene1));
+
+				VBox layout10 = new VBox(5);
+				layout10.setAlignment(Pos.CENTER);
+				layout10.getStylesheets().add(STYLE);
+				layout10.getChildren().addAll(menu10, back10);
+				scene10 = new Scene(layout10, WIDTH, HEIGHT);
+		
+
 
 	}
 
@@ -517,6 +583,12 @@ public class EstimateTool extends ElectricianApp {
 		Button save = new Button("Save");
 		save.setPrefSize(BWIDTH, BHEIGHT);
 		save.setOnAction(e -> {
+			try {
+				saveCurrentList();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
 			currentList.clear();
 			primaryStage.setScene(scene1);
 		});
@@ -539,6 +611,66 @@ public class EstimateTool extends ElectricianApp {
 		primaryStage.setScene(scene8);
 		
 	}
+	
+	public static void showSavedList() {
+
+		//--------------------------------------------------//
+		//scene 8 Table
+		//--------------------------------------------------//
+		
+		TableView<MaterialList> table;
+		// Name
+		TableColumn<MaterialList, String> nameCol = new TableColumn<>("Name");
+		nameCol.setMinWidth(150);
+		nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+		// type
+		TableColumn<MaterialList, String> typeCol = new TableColumn<>("Type");
+		typeCol.setMinWidth(150);
+		typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+		// Price
+		TableColumn<MaterialList, Double> priceCol = new TableColumn<>("Price");
+		priceCol.setMinWidth(100);
+		priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+		TableColumn<MaterialList, Integer> quantityCol = new TableColumn<>("Quantity");
+		quantityCol.setMinWidth(100);
+		quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+		//------------------------------------------------
+		table = new TableView<>();
+		table.setItems(getMaterialList());
+		table.getColumns().addAll(nameCol, typeCol, priceCol, quantityCol);
+
+		Button next = new Button("Delete");
+		next.setPrefSize(BWIDTH, BHEIGHT);
+		//next.setOnAction(e -> );
+
+		Button back = new Button("Next");
+		back.setPrefSize(BWIDTH, BHEIGHT);
+		back.setOnAction(e -> {
+			currentList.clear();
+			primaryStage.setScene(scene1);
+		});
+	
+		Button back2 = new Button("Go Back to Main Menu");
+		back2.setPrefSize(BWIDTH, BHEIGHT);
+		back2.setOnAction(e -> {
+			currentList.clear();
+			primaryStage.setScene(scene1);
+		});
+		
+		VBox layout = new VBox(5);
+		layout.setAlignment(Pos.CENTER);
+		layout.getStylesheets().add(STYLE);
+		layout.getChildren().addAll(table, next, back, back2);
+		scene8 = new Scene(layout, WIDTH, HEIGHT);
+		primaryStage.setScene(scene8);
+		
+	}
+	
+		
 
 	//-----------------------------------------------------------------------------------------//
 	//Logic
@@ -607,25 +739,22 @@ public class EstimateTool extends ElectricianApp {
 		}
         
 		//with database
-	/*	if(numberOfCircuits!=0) {
+		if(numberOfCircuits!=0) {
 			addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	addPriceToCurrentList("Wire", "12-2", temp);}
-			else if(breakerSide == 15) { addPriceToCurrentList("Wire", "14-2", temp);}
-			
+			else if(breakerSide == 15) { addPriceToCurrentList("Wire", "14-2", temp);}		
 		}
-		*/
 		
 		//without database
-		if(numberOfCircuits!=0) {
+	/*	if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", "" + breakerSide + "-Amp 1-Pole", 8.5, numberOfCircuits));					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	currentList.add(new MaterialList("Wire", "12-2", 0.23, temp)); total += 0.23*temp;}
-			else if(breakerSide == 15) { currentList.add(new MaterialList("Wire", "14-2", 0.3, temp)); total += 0.23*temp;}
-			
-		}
+			else if(breakerSide == 15) { currentList.add(new MaterialList("Wire", "14-2", 0.3, temp)); total += 0.23*temp;}	
+		} */
 
 		message = "Total circuits: " + numberOfCircuits + " Ligth circuits: " + numOfLighCircuit
 				+ " Receptacle Circuits: " + numOfRecCircuit + " Mixed circuits: " + mixCir;	
@@ -660,23 +789,21 @@ public class EstimateTool extends ElectricianApp {
 			numberOfCircuits++;
 
 		//with database 
-	/*	if(numberOfCircuits!=0) {
+		if(numberOfCircuits!=0) {
 			 addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);
 			 int temp = 10 *(dT + dD); 
 			 addPriceToCurrentList("Wire", "12-2", temp);
-		 } */
+		 } 
 		 
 		//without database
-		 if(numberOfCircuits!=0) {
+		/* if(numberOfCircuits!=0) {
 			 currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			 int temp = 10 *(dT + dD); 
 			 currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			 total += 1.3*temp;
-		 }
-		
-		
+		 } */
+			
 		message = "Total circuits: " + numberOfCircuits;	
-
 		return numberOfCircuits;
 	}
 
@@ -797,23 +924,21 @@ public class EstimateTool extends ElectricianApp {
 			numberOfCircuits++;
 		
 		//with database
-	/*	if(numberOfCircuits!=0) {
+		if(numberOfCircuits!=0) {
 			addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole",  numberOfCircuits);
 			int temp = 10 *(dT + dD); 
 			addPriceToCurrentList("Wire", "12-2", temp);
 		}
-    */		
+    		
 		//without database
-		if(numberOfCircuits!=0) {
+	/*	if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			int temp = 10 *(dT + dD);
 			currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			total += 1.3*temp;
-		}
+		} */
 		
 		message = "Total circuits: " + numberOfCircuits;
-
-		
 		return numberOfCircuits;
 	}
 
@@ -854,6 +979,132 @@ public class EstimateTool extends ElectricianApp {
 		double price = rs.getDouble("price");
 		total += price*quantity;
 		currentList.add(new MaterialList(name, type, price, quantity));
+		st.close();
+		connection.close();
+		
+	}
+	
+	public static void  saveCurrentList() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		
+		Class.forName("com.mysql.jdbc.Driver").newInstance();
+		connection = DriverManager.getConnection(url2, username, password);
+		Statement st = connection.createStatement();
+		String name = "";
+		String type = "";
+		double price = 0;
+		int quantity = 0;
+		int listNumber= 0; 
+
+		//check if table name already exists
+		DatabaseMetaData dbm = connection.getMetaData();
+		ResultSet tables;
+		boolean exists = true;
+			while (exists){
+				tables = dbm.getTables(null, null, "saved_list_"+listNumber, null);
+				if (tables.next()) {
+					// Table exists
+					System.out.println("yes"); listNumber++;
+				}
+				else {
+					// Table does not exist
+					System.out.println("no");
+					exists = false;
+				}	
+		}
+			
+		//creates a table
+		String query = "CREATE TABLE `saved`.`saved_list_"+listNumber+"` ("
+				+ "`item_id` INT NOT NULL AUTO_INCREMENT,"
+				+ "`name` VARCHAR(45) NOT NULL,"
+				+ "`type` VARCHAR(45) NOT NULL,"
+				+ "`price` DOUBLE NOT NULL,"
+				+ "`quantity` INT NOT NULL,"
+				+ "PRIMARY KEY (`item_id`));";
+		
+		System.out.println(st.executeUpdate(query)); // change this 
+		
+		//inserts values in table
+		String query2="";			
+		for(int i = 0; i < currentList.size(); i++) {
+		 	name = currentList.get(i).getName();
+		 	type = currentList.get(i).getType();
+		 	price = currentList.get(i).getPrice();
+		 	quantity = currentList.get(i).getQuantity();		
+		 	query2 = "INSERT INTO `saved`.`saved_list_"+listNumber+"` (`name`, `type`, `price`, `quantity`)"
+		 	 		+ " VALUES ('"+name+"', '"+type+"', '"+price+"', '"+quantity+"');";
+		 	System.out.println(st.executeUpdate(query2));	
+		}
+				
+		
+		
+		st.close();
+		connection.close();
+		
+	}
+	
+	public static boolean getTableNames() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		
+		Class.forName("com.mysql.jdbc.Driver").newInstance();
+		connection = DriverManager.getConnection(url2, username, password);
+		Statement st = connection.createStatement();
+
+		DatabaseMetaData dbm = connection.getMetaData();
+		ResultSet tables = dbm.getTables(null, null, null, null);
+	            
+				myLists.clear();
+				while(tables.next()){
+					myLists.add(tables.getString("TABLE_NAME"));
+				}
+		
+		if(myLists.size()==0) {
+			st.close();
+			connection.close();
+			return false;
+		}else {
+	
+			st.close();
+			connection.close();
+			return true;
+		}
+	}
+	
+	public void updateCurrentList(String tableName) {
+		
+		connection = DriverManager.getConnection(url, username, password);
+		Statement st = connection.createStatement();
+		ResultSet rs;
+		String query = "select price from electrician.materials where name = '"+name+"' and type = '"+type+"';";
+		String name="", type=""; double price=0;; int quantity=0;
+		rs = st.executeQuery(query);
+		rs.next();
+		name = rs.getString("name");
+		type = rs.getString("type");
+		price = rs.getDouble("price");
+		quantity = rs.getInt("quantity");
+		
+		
+		
+		
+		
+		currentList.add(new MaterialList(name, type, price, quantity));
+	}
+	/**
+	 * 
+	 * @param tableName
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public static void  deleteTable(String tableName, int index) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.jdbc.Driver").newInstance();
+		connection = DriverManager.getConnection(url2, username, password);
+		Statement st = connection.createStatement();
+		
+		//check tbleName
+		String query = "DROP TABLE `electrician`.`"+tableName+"`;";
+		st.executeUpdate(query);
+		myLists.remove(index);
 		st.close();
 		connection.close();
 		
