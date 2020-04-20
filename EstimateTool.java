@@ -51,6 +51,7 @@ public class EstimateTool extends ElectricianApp {
 	static List<MaterialList> currentList = new ArrayList<>();
 	static List<String> myLists = new ArrayList<>();
 	static int brCir;
+	static int myListIndex=0;
 	static String message = "";
 	static String message2 = "";
 	static double total = 0;
@@ -101,10 +102,13 @@ public class EstimateTool extends ElectricianApp {
 		saved.setPrefSize(BWIDTH, BHEIGHT);
 		saved.setOnAction(e -> {
 			try {
-				if(getTableNames()) {
+				
+				if(getTableNames()){
+					updateCurrentList(myLists.get(0));
 					showSavedList();
-				}else
-				    primaryStage.setScene(scene10);
+				} else {
+					 primaryStage.setScene(scene10);	
+				}
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -499,21 +503,29 @@ public class EstimateTool extends ElectricianApp {
 		invalid = new Scene(layoutInv, WIDTH, HEIGHT);
 		
 		
-		
-		
-		
 		//---------------------------------------------------------------//
 		//scene 9 saved lists
 		//---------------------------------------------------------------//
-		
-		
+		/*
 		Label menu9 = new Label("Saved Lists");
 		Button next9 = new Button("Test");// chabge this 
 		next9.setPrefSize(BWIDTH, BHEIGHT);
 		next9.setOnAction(e -> {
+		myListIndex = 0;
+			try {
+				if(getTableNames()){
+					updateCurrentList(myLists.get(myListIndex));
+					showSavedList();
+				} else {
+					 primaryStage.setScene(scene10);	
+				}
+				
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
-			primaryStage.setScene(scene1);
-			});
+		});
 		
 			Button back9 = new Button("Back");
 			back9.setPrefSize(BWIDTH, BHEIGHT);
@@ -525,26 +537,23 @@ public class EstimateTool extends ElectricianApp {
 			layout9.getChildren().addAll(menu9, next9, back9);
 			scene9 = new Scene(layout9, WIDTH, HEIGHT);
 
+			*/
 			
 			//---------------------------------------------------------------//
 			//scene 10 empty 
 			//---------------------------------------------------------------//
-			
-			
+				
 			Label menu10 = new Label("You have no saved lists");
 			
 				Button back10 = new Button("Back");
-				back9.setPrefSize(BWIDTH, BHEIGHT);
-				back9.setOnAction(e -> primaryStage.setScene(scene1));
+				back10.setPrefSize(BWIDTH, BHEIGHT);
+				back10.setOnAction(e -> primaryStage.setScene(scene1));
 
 				VBox layout10 = new VBox(5);
 				layout10.setAlignment(Pos.CENTER);
 				layout10.getStylesheets().add(STYLE);
 				layout10.getChildren().addAll(menu10, back10);
 				scene10 = new Scene(layout10, WIDTH, HEIGHT);
-		
-
-
 	}
 
 	/**
@@ -638,20 +647,59 @@ public class EstimateTool extends ElectricianApp {
 		quantityCol.setMinWidth(100);
 		quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-		//------------------------------------------------
 		table = new TableView<>();
 		table.setItems(getMaterialList());
 		table.getColumns().addAll(nameCol, typeCol, priceCol, quantityCol);
 
 		Button next = new Button("Delete");
 		next.setPrefSize(BWIDTH, BHEIGHT);
-		//next.setOnAction(e -> );
+		next.setOnAction(e ->{
+			try {
+				deleteTable(myLists.get(myListIndex), myListIndex);
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				
+		if(myLists.size() == myListIndex) {
+			 myListIndex--;
+		 }
+		
+		if(myLists.size()==0) {
+			myListIndex=0;
+			primaryStage.setScene(scene10);
+		}else {
+			try {
+				currentList.clear();
+				updateCurrentList(myLists.get(myListIndex));
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			showSavedList();
+		}
+		
+		} );
 
 		Button back = new Button("Next");
 		back.setPrefSize(BWIDTH, BHEIGHT);
 		back.setOnAction(e -> {
-			currentList.clear();
-			primaryStage.setScene(scene1);
+	
+			myListIndex++;
+			
+			if(myListIndex == myLists.size()) {
+				myListIndex = 0;				
+			}
+	
+			try {
+				currentList.clear();
+				updateCurrentList(myLists.get(myListIndex));
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}	
+			showSavedList();
+			
 		});
 	
 		Button back2 = new Button("Go Back to Main Menu");
@@ -1034,9 +1082,7 @@ public class EstimateTool extends ElectricianApp {
 		 	 		+ " VALUES ('"+name+"', '"+type+"', '"+price+"', '"+quantity+"');";
 		 	System.out.println(st.executeUpdate(query2));	
 		}
-				
-		
-		
+						
 		st.close();
 		connection.close();
 		
@@ -1068,25 +1114,28 @@ public class EstimateTool extends ElectricianApp {
 		}
 	}
 	
-	public void updateCurrentList(String tableName) {
-		
+	public static void updateCurrentList(String tableName) throws SQLException {
+		System.out.println("yooooooooooooooooooooooo");
+		String name="", type=""; double price=0; int quantity=0;
 		connection = DriverManager.getConnection(url, username, password);
 		Statement st = connection.createStatement();
 		ResultSet rs;
-		String query = "select price from electrician.materials where name = '"+name+"' and type = '"+type+"';";
-		String name="", type=""; double price=0;; int quantity=0;
+	    String query = "SELECT * from saved."+tableName+";";
 		rs = st.executeQuery(query);
-		rs.next();
+		
+		System.out.println("yooooooooooooooooooooooo");
+
+		while(rs.next()) {			
 		name = rs.getString("name");
 		type = rs.getString("type");
 		price = rs.getDouble("price");
 		quantity = rs.getInt("quantity");
-		
-		
-		
-		
+		System.out.println("yooooooooooooooooooooooo"+name+" "+type+" "+price+" "+quantity);
 		
 		currentList.add(new MaterialList(name, type, price, quantity));
+		
+		}
+		
 	}
 	/**
 	 * 
@@ -1102,7 +1151,7 @@ public class EstimateTool extends ElectricianApp {
 		Statement st = connection.createStatement();
 		
 		//check tbleName
-		String query = "DROP TABLE `electrician`.`"+tableName+"`;";
+		String query = "DROP TABLE `saved`.`"+tableName+"`;";
 		st.executeUpdate(query);
 		myLists.remove(index);
 		st.close();
