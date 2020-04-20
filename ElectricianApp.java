@@ -109,7 +109,8 @@ public class ElectricianApp extends Application {
 		});
 		
 		FilteredDropDown calcDrop = new FilteredDropDown("Calculator", ui);
-		calcDrop.add(new CalculatorTool(ui));
+		CalculatorTool calculator = new CalculatorTool(ui);
+		calcDrop.add(calculator);
 		//calcDrop.add(new CalculatorTool());
 		//calcDrop.add(new CalculatorTool());
 		
@@ -132,6 +133,8 @@ public class ElectricianApp extends Application {
 				history, notes);
 		sm.loadSettings();
 		ui.setSettingsManager(sm);
+		//ui.setTools(favorites, ohms, circuits, estimate, calculator, history, notes);
+		ui.setTools(favorites, calculator, history, notes);
 		
 		
 		//VBox outerWrap = new VBox(mainBox);
@@ -220,6 +223,7 @@ class UIManager {
 	VBox mainBox;
 	CustomScroll scroll;
 	SettingsManager settings;
+	ArrayList<Pane> tools;
 	
 	// 0 for tabs, 1, external pages
 	int view;
@@ -317,6 +321,27 @@ class UIManager {
 	
 	public void addToHistory(String statement) {
 		settings.getHistory().addStatement(statement);
+	}
+	
+	public void setTools(Pane...panes) {
+		tools = new ArrayList<Pane>();
+		for(int i=0; i<panes.length; i++) {
+			tools.add(panes[i]);
+		}
+	}
+	
+	public void clearAll() {
+		//System.out.println(tools.size());
+		for(int i=0; i<tools.size(); i++) {
+			try {
+				Tool tool = (Tool)tools.get(i);
+				tool.clearDisplay();
+			}
+			catch(Exception e) {
+				// not a sub-tool, cannot clear
+				continue;
+			}
+		}
 	}
 	
 }
@@ -655,7 +680,7 @@ class MainBar extends ToolBar {
 		
 		Button clear = new Button("Clear");
 		clear.setOnAction(e -> {
-			//ui.clearAll();
+			ui.clearAll();
 		});
 		
 		Button close = new Button("Close");
@@ -1098,11 +1123,27 @@ class HistoryTool extends Pane {
 			deleteMarked();
 		});
 		
+		Button markAll = new Button("Mark All");
+		markAll.setOnAction(e -> {
+			markAll();
+		});
+		
+		Button unmarkAll = new Button("Unmark All");
+		unmarkAll.setOnAction(e -> {
+			unmarkAll();
+		});
+		
+		HBox buttons = new HBox(removeMarked, markAll, unmarkAll);
+		buttons.setSpacing(5);
+		
 		checks = new CheckList();
+		checks.setSpacing(3);
 		
 		Label label = new Label("Saved Results:");
 		
-		VBox wrap = new VBox(removeMarked, label, checks);
+		VBox wrap = new VBox(buttons, label, checks);
+		wrap.setSpacing(5);
+		
 		VBox outerWrap = new VBox(wrap);
 		VBox.setMargin(wrap, new Insets(10,10,10,10));
 		
@@ -1111,6 +1152,10 @@ class HistoryTool extends Pane {
 	
 	public void markAll() {
 		checks.checkAll();
+	}
+	
+	public void unmarkAll() {
+		checks.uncheckAll();
 	}
 	
 	public void addStatement(String statement) {
