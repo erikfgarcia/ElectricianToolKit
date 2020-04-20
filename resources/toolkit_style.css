@@ -67,9 +67,10 @@
 	-fx-font-size: 20px;
 }
 
-.label {
+#ContentBox .label {
 	-fx-font-family: "Helvetica";
-	-fx-font-size: 20px;
+	-fx-font-weight: bold;
+	-fx-font-size: 14px;
 }
 
 #EqualsLabel {
@@ -172,9 +173,14 @@
     -fx-font-size: 12px;
 }
 
+<<<<<<< HEAD
 /* Text added by Erik */
+=======
 
-.scroll-pane > .viewport {
+/* Test added by Erik */
+>>>>>>> 380b0b9d5afd8f00dadd7a97b22bc277d4cf1d3e
+
+/*.scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
 
@@ -220,6 +226,12 @@
 .root {
 	-fx-background-color: linear-gradient(rgb(150,150,150), rgb(160,160,160));
 }
+*/
+
+
+
+
+
 
 
 
