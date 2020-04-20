@@ -67,9 +67,10 @@
 	-fx-font-size: 20px;
 }
 
-.label {
+#ContentBox .label {
 	-fx-font-family: "Helvetica";
-	-fx-font-size: 20px;
+	-fx-font-weight: bold;
+	-fx-font-size: 14px;
 }
 
 #EqualsLabel {
@@ -172,9 +173,10 @@
     -fx-font-size: 12px;
 }
 
+
 /* Test added by Erik */
 
-.scroll-pane > .viewport {
+/*.scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
 
@@ -220,6 +222,12 @@
 .root {
 	-fx-background-color: linear-gradient(rgb(150,150,150), rgb(160,160,160));
 }
+*/
+
+
+
+
+
 
 
 
