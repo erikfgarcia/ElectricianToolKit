@@ -172,7 +172,7 @@
     -fx-font-size: 12px;
 }
 
-/* Test added by Erik */
+/* Text added by Erik */
 
 .scroll-pane > .viewport {
    -fx-background-color: transparent;

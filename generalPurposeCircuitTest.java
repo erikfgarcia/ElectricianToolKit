@@ -8,7 +8,7 @@ class generalPurposeCircuitTest {
 
 	@Test
 	void test() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-		EstimateTool test = new  EstimateTool();
+		EstimateTool test = new  EstimateTool(null);
 		//generalPurposeCircuit(dT, dD, constantLoad, breakerSide)
 		
 		int result = test.generalPurposeCircuit(10, 0, 0, 15);

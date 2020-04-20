@@ -93,20 +93,16 @@ public class ElectricianApp extends Application {
 		
 		FilteredDropDown circuitsDrop = new FilteredDropDown("Circuits", ui);
 		
-		//FilteredDropDown estimateDrop = new FilteredDropDown("Estimates", ui);
-		//estimateDrop.setToExternal(new EstimateTool(ui));
-		//estimateDrop.setToExternal(new Label("Test"));
+		//  Erik :)
+		EstimateTool estimate = new EstimateTool(ui);
 		Button estimateDrop = new Button("Estimates");
 		estimateDrop.setId("DropButton");
 		estimateDrop.setPrefSize(400, 60);
-		estimateDrop.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				//StyledScene page = new StyledScene(new ExternalPage(ui,new EstimateTool(ui)));
-				//ui.setScene(page.getScene());
-				EstimateTool.display();
-			}
+	    estimateDrop.setOnAction(e-> {		
+	    	
+			ui.setScene(estimate.getPrimaryScene());							
 		});
-		
+
 		FilteredDropDown calcDrop = new FilteredDropDown("Calculator", ui);
 		calcDrop.add(new CalculatorTool());
 		calcDrop.add(new CalculatorTool());
@@ -184,7 +180,7 @@ public class ElectricianApp extends Application {
 		
 		outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().subtract(13.5));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().subtract(13.5));
-		mainScroll.prefHeightProperty().bind(outermostBox.heightProperty().subtract(50));
+		mainScroll.prefHeightProperty().bind(outermostBox.heightProperty().subtract(50)); 
 		/*outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().multiply(0.978));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().multiply(0.94));
 		*/
@@ -211,7 +207,7 @@ public class ElectricianApp extends Application {
  * 
  */
 
-class UIManager {
+ class UIManager {
 	
 	Stage primary;
 	Scene main;
@@ -439,7 +435,6 @@ class DropDown extends Region {
 }
 
 class FilteredDropDown extends Region {
-	
 	UIManager ui;
 	DropDown drop;
 	Insets insets;
