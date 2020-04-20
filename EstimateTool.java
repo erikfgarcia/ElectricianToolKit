@@ -65,7 +65,7 @@ public class EstimateTool extends Pane {
 	static String url = "jdbc:mysql://localhost:3306/" + databaseName + "?useSSL=false";
 	static String url2 = "jdbc:mysql://localhost:3306/" + databaseName2 + "?useSSL=false";
 	static String username = "root";
-	static String password = "*******";
+	static String password = "********";
 	
 	UIManager ui; // set scene from main program  
 	
@@ -132,7 +132,7 @@ public class EstimateTool extends Pane {
 		//menu1.setAlignment(Pos.CENTER);
 
 		VBox layout1 = new VBox(5);
-		layout1.setAlignment(Pos.CENTER);
+		//layout1.setAlignment(Pos.CENTER);
 	    layout1.getStylesheets().add(STYLE);
 		layout1.getChildren().addAll(menu1, gpc, abc, ic, bl, saved , back);
 		//scene1 = new Scene(layout1, WIDTH, HEIGHT);
@@ -159,7 +159,7 @@ public class EstimateTool extends Pane {
 				ui.setScene(invalid);
 			} else {
 				//with database
-				 try {
+/*				 try {
 					 if (Integer.parseInt(input1.getText())!=0)
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(input1.getText()));
 					 
@@ -170,9 +170,9 @@ public class EstimateTool extends Pane {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				 
+*/				 
 	//without database				 
-	/*	if (Integer.parseInt(input1.getText())!=0) {		 
+		if (Integer.parseInt(input1.getText())!=0) {		 
 			currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(input1.getText())));
 				 total += 0.9 * Integer.parseInt(input1.getText());
 		}
@@ -180,7 +180,7 @@ public class EstimateTool extends Pane {
 		if (Integer.parseInt(input2.getText())!=0) {
 			currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(input2.getText())));
 			total += 1.3 * Integer.parseInt(input2.getText());
-		} */   				
+		}    				
 				//primaryStage.setScene(scene3);
 				ui.setScene(scene3);
 			} 
