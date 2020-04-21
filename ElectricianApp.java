@@ -7,59 +7,41 @@
  * 
  * Errors/Requirements:
  * 		- scroll bars being cut out of window [Partially fixed]
- * 		- make history/ohms/circuits tools
- * 		- fix display for estimate tool
+ * 		- make ohms/circuits/voltage-drop tools
+ * 		- refine UI
  * 
  */
 
 
-import java.util.regex.Pattern;
+import java.io.File;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.scene.Group;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BorderPane;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import java.util.ArrayList;
-import java.util.Collections;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.*;
 import javafx.scene.control.TextArea;
-
-import java.io.PrintWriter;
-import java.util.Scanner;
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 
 /**
@@ -93,23 +75,26 @@ public class ElectricianApp extends Application {
 		
 		FilteredDropDown circuitsDrop = new FilteredDropDown("Circuits", ui);
 		
-		//  Erik :)
+		//FilteredDropDown estimateDrop = new FilteredDropDown("Estimates", ui);
+		//estimateDrop.setToExternal(new EstimateTool(ui));
+		//estimateDrop.setToExternal(new Label("Test"));
 		EstimateTool estimate = new EstimateTool(ui);
 		Button estimateDrop = new Button("Estimates");
 		estimateDrop.setId("DropButton");
 		estimateDrop.setPrefSize(400, 60);
-	    estimateDrop.setOnAction(e-> {		
-	    	
+	   	estimateDrop.setOnAction(e-> {		
 			ui.setScene(estimate.getPrimaryScene());							
 		});
-
+		
 		FilteredDropDown calcDrop = new FilteredDropDown("Calculator", ui);
-		calcDrop.add(new CalculatorTool());
-		calcDrop.add(new CalculatorTool());
-		calcDrop.add(new CalculatorTool());
+		CalculatorTool calculator = new CalculatorTool(ui);
+		calcDrop.add(calculator);
+		//calcDrop.add(new CalculatorTool());
+		//calcDrop.add(new CalculatorTool());
 		
 		FilteredDropDown historyDrop = new FilteredDropDown("History", ui);
 		HistoryTool history = new HistoryTool();
+		historyDrop.add(history);
 		
 		// list of all main buttons
 		ArrayList<Node> listItems = new ArrayList<Node>();
@@ -126,6 +111,8 @@ public class ElectricianApp extends Application {
 				history, notes);
 		sm.loadSettings();
 		ui.setSettingsManager(sm);
+		//ui.setTools(favorites, ohms, circuits, estimate, calculator, history, notes);
+		ui.setTools(favorites, calculator, history, notes);
 		
 		
 		//VBox outerWrap = new VBox(mainBox);
@@ -180,7 +167,7 @@ public class ElectricianApp extends Application {
 		
 		outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().subtract(13.5));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().subtract(13.5));
-		mainScroll.prefHeightProperty().bind(outermostBox.heightProperty().subtract(50)); 
+		mainScroll.prefHeightProperty().bind(outermostBox.heightProperty().subtract(50));
 		/*outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().multiply(0.978));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().multiply(0.94));
 		*/
@@ -207,13 +194,14 @@ public class ElectricianApp extends Application {
  * 
  */
 
- class UIManager {
+class UIManager {
 	
 	Stage primary;
 	Scene main;
 	VBox mainBox;
 	CustomScroll scroll;
 	SettingsManager settings;
+	ArrayList<Pane> tools;
 	
 	// 0 for tabs, 1, external pages
 	int view;
@@ -289,7 +277,7 @@ public class ElectricianApp extends Application {
 	
 	public Tool getToolByName(String name) {
 		if(name == "Calculator") {
-			return new CalculatorTool();
+			return new CalculatorTool(this);
 		}
 		else if(name == "") {
 			
@@ -307,6 +295,31 @@ public class ElectricianApp extends Application {
 	
 	public SettingsManager getSM() {
 		return settings;
+	}
+	
+	public void addToHistory(String statement) {
+		settings.getHistory().addStatement(statement);
+	}
+	
+	public void setTools(Pane...panes) {
+		tools = new ArrayList<Pane>();
+		for(int i=0; i<panes.length; i++) {
+			tools.add(panes[i]);
+		}
+	}
+	
+	public void clearAll() {
+		//System.out.println(tools.size());
+		for(int i=0; i<tools.size(); i++) {
+			try {
+				Tool tool = (Tool)tools.get(i);
+				tool.clearDisplay();
+			}
+			catch(Exception e) {
+				// not a sub-tool, cannot clear
+				continue;
+			}
+		}
 	}
 	
 }
@@ -435,6 +448,7 @@ class DropDown extends Region {
 }
 
 class FilteredDropDown extends Region {
+	
 	UIManager ui;
 	DropDown drop;
 	Insets insets;
@@ -644,7 +658,7 @@ class MainBar extends ToolBar {
 		
 		Button clear = new Button("Clear");
 		clear.setOnAction(e -> {
-			//ui.clearAll();
+			ui.clearAll();
 		});
 		
 		Button close = new Button("Close");
@@ -795,7 +809,11 @@ class CustomScroll extends ScrollPane {
 class CheckList extends VBox {
 	
 	public CheckList(CheckBox... boxes) {
-		this.getChildren().addAll(boxes);
+		//this.getChildren().addAll(boxes);
+		for(int i=0; i<boxes.length; i++) {
+			boxes[i].setAllowIndeterminate(false);
+			this.getChildren().add(boxes[i]);
+		}
 	}
 	
 	// each index represents check box, cell in array is 1 if checked
@@ -806,7 +824,7 @@ class CheckList extends VBox {
 		for(int i=0; i<array.length; i++) {
 			try {
 				CheckBox box = (CheckBox)checkList.get(i);
-				box.setIndeterminate(false);
+				box.setAllowIndeterminate(false);
 		
 				if(box.isSelected())
 					array[i] = 1;
@@ -880,6 +898,39 @@ class CheckList extends VBox {
 			try {
 				CheckBox box = (CheckBox) checkList.get(i);
 				box.setSelected(checks[i]==1 ? true : false);
+
+			} catch (Exception e) {
+				continue;
+			}
+		}
+	}
+	
+	public void removeChecked() {
+		ObservableList<Node> checkList = this.getChildren();
+		
+		for (int i = 0; i < checkList.size(); i++) {
+			try {
+				CheckBox box = (CheckBox) checkList.get(i);
+				if(box.isSelected())
+					this.getChildren().remove(box);
+
+			} catch (Exception e) {
+				continue;
+			}
+		}
+	}
+	
+	public void addCheckBox(CheckBox box) {
+		box.setAllowIndeterminate(false);
+		this.getChildren().add(box);
+	}
+	
+	public void checkAll() {
+		ObservableList<Node> checkList = this.getChildren();
+		for (int i = 0; i < checkList.size(); i++) {
+			try {
+				CheckBox box = (CheckBox) checkList.get(i);
+				box.setSelected(true);
 
 			} catch (Exception e) {
 				continue;
@@ -998,6 +1049,11 @@ class FavoritesTool extends Pane {
 	
 }
 
+/**
+ * 
+ * @author RyanS
+ *
+ */
 class NotesTool extends Pane {
 	
 	TextArea text;
@@ -1030,9 +1086,67 @@ class NotesTool extends Pane {
 	
 }
 
+/**
+ * 
+ * @author RyanS
+ *
+ */
 class HistoryTool extends Pane {
 	
+	CheckList checks;
 	
+	public HistoryTool() {
+		Button removeMarked = new Button("Remove Marked");
+		removeMarked.setOnAction(e -> {
+			deleteMarked();
+		});
+		
+		Button markAll = new Button("Mark All");
+		markAll.setOnAction(e -> {
+			markAll();
+		});
+		
+		Button unmarkAll = new Button("Unmark All");
+		unmarkAll.setOnAction(e -> {
+			unmarkAll();
+		});
+		
+		HBox buttons = new HBox(removeMarked, markAll, unmarkAll);
+		buttons.setSpacing(5);
+		
+		checks = new CheckList();
+		checks.setSpacing(3);
+		
+		Label label = new Label("Saved Results:");
+		
+		VBox wrap = new VBox(buttons, label, checks);
+		wrap.setSpacing(5);
+		
+		VBox outerWrap = new VBox(wrap);
+		VBox.setMargin(wrap, new Insets(10,10,10,10));
+		
+		this.getChildren().add(outerWrap);
+	}
+	
+	public void markAll() {
+		checks.checkAll();
+	}
+	
+	public void unmarkAll() {
+		checks.uncheckAll();
+	}
+	
+	public void addStatement(String statement) {
+		checks.addCheckBox(new CheckBox(statement));
+	}
+	
+	public void deleteMarked() {
+		checks.removeChecked();
+	}
+	
+	public CheckList getChecks() {
+		return checks;
+	}
 	
 }
 
@@ -1048,9 +1162,19 @@ class HistoryTool extends Pane {
  */
 abstract class Tool extends Pane {
 	
+
+	UIManager ui;
+	public Tool(UIManager ui) {
+		this.ui = ui;
+	}
+	
 	abstract public String getToolName();
 	abstract public String printResult();
 	abstract public void clearDisplay();
+	
+	public void printToHistory() {
+		ui.addToHistory(printResult());
+	}
 	
 }
 
@@ -1061,18 +1185,21 @@ abstract class Tool extends Pane {
  */
 class CalculatorTool extends Tool {
 	
+	//UIManager ui;
 	String name = "Calculator";
 	TextField input;
 	Label result;
 	Button enter;
+	Button print;
 	
-	public CalculatorTool() {
+	public CalculatorTool(UIManager ui) {
+		super(ui);
 		Label equals = new Label(" = ");
 		equals.setId("EqualsLabel");
 		input = new TextField();
 		result = new Label();
-		enter = new Button("Enter");
 		
+		enter = new Button("Enter");
 		enter.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -1084,11 +1211,21 @@ class CalculatorTool extends Tool {
 			}
 		});;
 		
+		print = new Button("Print");
+		print.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				printToHistory();
+			}
+		});;
+		
 		Label directions = new Label("Enter basic equation to evaluate:");
 		HBox inputBox = new HBox(input, equals, result);
 		inputBox.setSpacing(5);
 		
-		VBox outerBox = new VBox(directions, inputBox, enter);
+		HBox buttons = new HBox(enter, print);
+		buttons.setSpacing(5);
+		
+		VBox outerBox = new VBox(directions, inputBox, buttons);
 		outerBox.setSpacing(5);
 		
 		VBox outerWrap = new VBox(outerBox);
@@ -1129,7 +1266,8 @@ class CalculatorTool extends Tool {
  */
 
 /**
- * Handles the loading and saving of user settings
+ * Handles the loading and saving of user settings. Also invoves
+ * 		general handling of modifiable UI components.
  * @author RyanS
  *
  */
@@ -1256,7 +1394,10 @@ class SettingsManager {
 		try {
 			fileIn = new Scanner(historyFile);
 			
-			
+			while(fileIn.hasNextLine()) {
+				String statement = fileIn.nextLine().trim();
+				history.addStatement(statement);
+			}
 			
 			fileIn.close();
 		}
@@ -1326,8 +1467,13 @@ class SettingsManager {
 	public void saveHistory() {
 		try {
 			PrintWriter fileOut = new PrintWriter(historyFile);
+			CheckList boxes = history.getChecks();
+			ObservableList<Node> checkList = boxes.getChildren();
 			
-			
+			for(int i=0; i<checkList.size(); i++) {
+				CheckBox box = (CheckBox)checkList.get(i);
+				fileOut.println(box.getText());
+			}
 			
 			fileOut.close();
 		}
@@ -1347,6 +1493,22 @@ class SettingsManager {
 		catch(Exception e) {
 			System.out.println("ERROR:  file writing");
 		}
+	}
+	
+	/*
+	 * Getters for tools
+	 */
+	
+	public FavoritesTool getFavorites() {
+		return favorites;
+	}
+	
+	public HistoryTool getHistory() {
+		return history;
+	}
+	
+	public NotesTool getNotes() {
+		return notes;
 	}
 	
 }
