@@ -3,7 +3,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
-
+/**
+ * Testing 
+ * @author Erik F Garcia
+ *
+ */
 class generalPurposeCircuitTest {
 
 	@Test

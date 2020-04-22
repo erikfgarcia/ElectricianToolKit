@@ -30,6 +30,7 @@ import javafx.stage.Stage;
  * This class creates estimates. Retrieves prices from an database MySQL and stores list into the data base
  * Some prices are hard coded replacing the database for demonstration .  
  * Without connection to a database this class cannot save lists 
+ * 
  * @author Erik F Garcia
  *
  */
@@ -50,7 +51,7 @@ public class EstimateTool extends Pane {
 	//static int HEIGHT = 639;// scene height
 	static int BWIDTH = 550; // Button width
 	static int BHEIGHT = 55;// Button height
-	static String STYLE = "/resources/toolkit_style.css";//scene style
+	static String STYLE = "/resources/toolkit_style.css";//scene style file location
 	static List<MaterialList> currentList = new ArrayList<>();
 	static List<String> myLists = new ArrayList<>();
 	static int brCir;
@@ -65,10 +66,13 @@ public class EstimateTool extends Pane {
 	static String url = "jdbc:mysql://localhost:3306/" + databaseName + "?useSSL=false";
 	static String url2 = "jdbc:mysql://localhost:3306/" + databaseName2 + "?useSSL=false";
 	static String username = "root";
-	static String password = "********";
-	
+	static String password = "4050lsDF.";
 	UIManager ui; // set scene from main program  
 	
+	/**
+	 * constructor
+	 * @param ui set scene from main program  
+	 */
 	public EstimateTool(UIManager ui) {
 		 this.ui = ui;   	
 	
@@ -159,7 +163,7 @@ public class EstimateTool extends Pane {
 				ui.setScene(invalid);
 			} else {
 				//with database
-/*				 try {
+			 try {
 					 if (Integer.parseInt(input1.getText())!=0)
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(input1.getText()));
 					 
@@ -170,9 +174,9 @@ public class EstimateTool extends Pane {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-*/				 
+				 
 	//without database				 
-		if (Integer.parseInt(input1.getText())!=0) {		 
+/*		if (Integer.parseInt(input1.getText())!=0) {		 
 			currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(input1.getText())));
 				 total += 0.9 * Integer.parseInt(input1.getText());
 		}
@@ -180,7 +184,8 @@ public class EstimateTool extends Pane {
 		if (Integer.parseInt(input2.getText())!=0) {
 			currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(input2.getText())));
 			total += 1.3 * Integer.parseInt(input2.getText());
-		}    				
+		}    
+*/
 				//primaryStage.setScene(scene3);
 				ui.setScene(scene3);
 			} 
@@ -272,7 +277,7 @@ public class EstimateTool extends Pane {
                  ui.setScene(invalid);
 			} else {
 				//with database
-/*				try {
+				try {
 					if(Integer.parseInt(recNum1.getText())!=0)
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(recNum1.getText()));
 					
@@ -284,9 +289,9 @@ public class EstimateTool extends Pane {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} 
-*/				
+				
 				//without database
-				if (Integer.parseInt(recNum1.getText())!=0) {		 
+/*				if (Integer.parseInt(recNum1.getText())!=0) {		 
 					currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum1.getText())));
 						 total += 0.9 * Integer.parseInt(recNum1.getText());
 				}
@@ -295,7 +300,7 @@ public class EstimateTool extends Pane {
 					currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(recNum2.getText())));
 					total += 1.3 * Integer.parseInt(recNum2.getText());
 				}
-				
+*/				
 				
 				try {
 					if (applianceBranchCircuit(Integer.parseInt(recNum1.getText()),
@@ -454,7 +459,7 @@ public class EstimateTool extends Pane {
 				ui.setScene(invalid);
 			} else {
 				
-/*				 try {
+				 try {
 					 if(Integer.parseInt(recNum5.getText())!=0)
 					 addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(recNum5.getText()));
 					 
@@ -466,10 +471,10 @@ public class EstimateTool extends Pane {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} 
-*/				
+				
 				 
 				 //without database
-					if (Integer.parseInt(recNum5.getText())!=0) {		 
+/*					if (Integer.parseInt(recNum5.getText())!=0) {		 
 						currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum5.getText())));
 							 total += 0.9 * Integer.parseInt(recNum5.getText());
 					}
@@ -478,7 +483,7 @@ public class EstimateTool extends Pane {
 						currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(recNum5.getText())));
 						total += 1.3 * Integer.parseInt(recNum6.getText());
 					} 
-				
+*/				
 				try {
 					if (bathLoundry(Integer.parseInt(recNum5.getText()), Integer.parseInt(recNum6.getText())) == 0) {
 						currentList.clear();
@@ -600,6 +605,7 @@ public class EstimateTool extends Pane {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} 
+			total = 0.00;
 			currentList.clear();
 	  		//primaryStage.setScene(scene1);
 	  		ui.setScene(scene1);
@@ -609,14 +615,13 @@ public class EstimateTool extends Pane {
 		Button back = new Button("Go Back to Main Menu");
 		back.setPrefSize(BWIDTH, BHEIGHT);
 		back.setOnAction(e -> {
+			total = 0.00;
 			currentList.clear();
 			//primaryStage.setScene(scene1);
 			ui.setScene(scene1);
 		});
-		//Formatter msg = new Formatter(); 
-        //msg.format("Total: $%d", total); 
+	 
 		message2 = "Total: $"+total;
-		total = 0.00;
 		Text text = new Text(20, 20, message);
 		Text text2 = new Text(20, 20, message2);
 		VBox layout = new VBox(5);
@@ -719,11 +724,14 @@ public class EstimateTool extends Pane {
 			//primaryStage.setScene(scene1);
 			ui.setScene(scene1);
 		});
-		
+		message2 = "Total: $"+total;
+		total = 0.00;
+		Text text = new Text(20, 20, message);
+		Text text2 = new Text(20, 20, message2);
 		VBox layout = new VBox(5);
 		//layout.setAlignment(Pos.CENTER);
 		layout.getStylesheets().add(STYLE);
-		layout.getChildren().addAll(table, next, back, back2);
+		layout.getChildren().addAll(text,table, text2, next, back, back2);
 		//scene9 = new Scene(layout, WIDTH, HEIGHT);
 		//primaryStage.setScene(scene8);
 		scene9 = new Scene(layout);
@@ -800,23 +808,23 @@ public class EstimateTool extends Pane {
 		}
         
 		//with database
-/*		if(numberOfCircuits!=0) {
+		if(numberOfCircuits!=0) {
 			addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	addPriceToCurrentList("Wire", "12-2", temp);}
 			else if(breakerSide == 15) { addPriceToCurrentList("Wire", "14-2", temp);}		
 		}
-*/		
+		
 		//without database
-		if(numberOfCircuits!=0) {
+/*		if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", "" + breakerSide + "-Amp 1-Pole", 8.5, numberOfCircuits));					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	currentList.add(new MaterialList("Wire", "12-2", 0.23, temp)); total += 0.23*temp;}
 			else if(breakerSide == 15) { currentList.add(new MaterialList("Wire", "14-2", 0.3, temp)); total += 0.23*temp;}	
 		} 
-
+*/
 		message = "Total circuits: " + numberOfCircuits + " Ligth circuits: " + numOfLighCircuit
 				+ " Receptacle Circuits: " + numOfRecCircuit + " Mixed circuits: " + mixCir;	
 
@@ -850,26 +858,26 @@ public class EstimateTool extends Pane {
 			numberOfCircuits++;
 
 		//with database 
-/*		if(numberOfCircuits!=0) {
+		if(numberOfCircuits!=0) {
 			 addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);
 			 int temp = 10 *(dT + dD); 
 			 addPriceToCurrentList("Wire", "12-2", temp);
 		 } 
-*/		 
+		 
 		//without database
-		 if(numberOfCircuits!=0) {
+/*		 if(numberOfCircuits!=0) {
 			 currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			 int temp = 10 *(dT + dD); 
 			 currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			 total += 1.3*temp;
 		 } 
-			
+*/			
 		message = "Total circuits: " + numberOfCircuits;	
 		return numberOfCircuits;
 	}
 
 	/**
-	 * 
+	 * hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 	 * @param brCir
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
@@ -961,9 +969,11 @@ public class EstimateTool extends Pane {
 	}
     
 	/**
-	 * 
-	 * @param dT
-	 * @param dD
+	 * This method returns the minimum number of circuits required. That number  depends on  
+	 * the number of double and double duplex receptacles. This method also updates the global message. 
+	 *    
+	 * @param dT double or triple receptacle. 
+	 * @param dD double duplex receptacle. 
 	 * @return
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
@@ -985,26 +995,27 @@ public class EstimateTool extends Pane {
 			numberOfCircuits++;
 		
 		//with database
-/*		if(numberOfCircuits!=0) {
+		if(numberOfCircuits!=0) {
 			addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole",  numberOfCircuits);
 			int temp = 10 *(dT + dD); 
 			addPriceToCurrentList("Wire", "12-2", temp);
 		}
- */   		
+    		
 		//without database
-		if(numberOfCircuits!=0) {
+/*		if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			int temp = 10 *(dT + dD);
 			currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			total += 1.3*temp;
 		} 
-		
+*/		
 		message = "Total circuits: " + numberOfCircuits;
 		return numberOfCircuits;
 	}
 
 	/**
-	 * 
+	 * This method adds the elements from currentList to materials (observable list)
+	 * so that the elements can be display.
 	 * @return
 	 */
 	public static ObservableList<MaterialList> getMaterialList() {
@@ -1019,7 +1030,8 @@ public class EstimateTool extends Pane {
 		return materials;
 	}
 	/**
-	 * 
+	 * This method stores 'name', 'type', 'price', and 'quantity' into currentList. This is the information of one
+	 * element of the list. The price is retrieve from the database using 'name' and 'type'.  
 	 * @param name
 	 * @param type
 	 * @param quantity
@@ -1045,6 +1057,8 @@ public class EstimateTool extends Pane {
 		
 	}
 	/**
+	 * This method save the current calculation done by the user into the database.
+	 * This method also stores the values of the globals 'message' and 'total' in a different table 
 	 * 
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
@@ -1062,7 +1076,7 @@ public class EstimateTool extends Pane {
 		int quantity = 0;
 		int listNumber= 0; 
 
-		//check if table name already exists
+		//check if table name already exists and update listNumber so is not repeated
 		DatabaseMetaData dbm = connection.getMetaData();
 		ResultSet tables;
 		boolean exists = true;
@@ -1070,11 +1084,10 @@ public class EstimateTool extends Pane {
 				tables = dbm.getTables(null, null, "saved_list_"+listNumber, null);
 				if (tables.next()) {
 					// Table exists
-					System.out.println("yes"); listNumber++;
+					 listNumber++;
 				}
 				else {
 					// Table does not exist
-					System.out.println("no");
 					exists = false;
 				}	
 		}
@@ -1090,7 +1103,7 @@ public class EstimateTool extends Pane {
 		
 		System.out.println(st.executeUpdate(query)); // change this 
 		
-		//inserts values in table
+		//inserts values into the created table
 		String query2="";			
 		for(int i = 0; i < currentList.size(); i++) {
 		 	name = currentList.get(i).getName();
@@ -1099,16 +1112,23 @@ public class EstimateTool extends Pane {
 		 	quantity = currentList.get(i).getQuantity();		
 		 	query2 = "INSERT INTO `saved`.`saved_list_"+listNumber+"` (`name`, `type`, `price`, `quantity`)"
 		 	 		+ " VALUES ('"+name+"', '"+type+"', '"+price+"', '"+quantity+"');";
-		 	System.out.println(st.executeUpdate(query2));	
+		 	System.out.println(st.executeUpdate(query2)); // change this	
 		}
-						
+		
+		//stores message and total in a different table
+		String query3 ="INSERT INTO `electrician`.`table_info` (`table_id`,`name`, `message`, `total`)"
+				+ "VALUES ('"+listNumber+"' , 'saved_list_"+listNumber+"' , '"+message+"', '"+total+"');";
+			
+		st.executeUpdate(query3);
+					
 		st.close();
 		connection.close();
 		
 	}
 	/**
+	 * This method retrieves the names of lists saved by the user and place them into myList. 
+	 * @return true if there is at least one list, false otherwise.
 	 * 
-	 * @return
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
@@ -1140,9 +1160,11 @@ public class EstimateTool extends Pane {
 		}
 	}
 	/**
-	 * 
-	 * @param tableName
-	 * @throws SQLException
+	 * This method update currentList with the content of tableName from MySQL.
+	 * This method also update the globals message and total with the corresponding values to the table.
+	 *  
+	 * @param tableName contains the name of the list saves by the user stored in MySQL.
+	 * @throws SQLException 
 	 */
 	public static void updateCurrentList(String tableName) throws SQLException {
 		String name="", type=""; double price=0; int quantity=0;
@@ -1151,7 +1173,8 @@ public class EstimateTool extends Pane {
 		ResultSet rs;
 	    String query = "SELECT * from saved."+tableName+";";
 		rs = st.executeQuery(query);
-
+		
+		// updates currentList
 		while(rs.next()) {			
 			name = rs.getString("name");
 			type = rs.getString("type");
@@ -1160,10 +1183,24 @@ public class EstimateTool extends Pane {
 			currentList.add(new MaterialList(name, type, price, quantity));
 		}
 		
+		// gets the message and total
+		String query2 = "SELECT total from electrician.table_info where name = '"+tableName+"';";
+		rs = st.executeQuery(query2);
+		rs.next();
+		total = rs.getDouble("total");
+		query2 = "SELECT message from electrician.table_info where name = '"+tableName+"';";
+		rs = st.executeQuery(query2);
+		rs.next();
+		message = rs.getString("message");
+		
+		st.close();
+		connection.close();
 	}
 	/**
-	 * 
-	 * @param tableName
+	 * This method deletes tableName from MySQL and removes tableName from myList. This method is designed 
+	 * to deleted the saved lists from the user.
+	 *  
+	 * @param tableName is the name of the list saved by the user, stored in MySQL.
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
@@ -1174,24 +1211,28 @@ public class EstimateTool extends Pane {
 		connection = DriverManager.getConnection(url2, username, password);
 		Statement st = connection.createStatement();
 		
-		//check tableName
+		//check tableName-----------------------------------------------------------
+		
+		//deletes table and remove index
 		String query = "DROP TABLE `saved`.`"+tableName+"`;";
 		st.executeUpdate(query);
 		myLists.remove(index);
+		// deletes total and message
+		String query2 ="DELETE FROM `electrician`.`table_info` WHERE (`name` = '"+tableName+"')";
+		st.executeUpdate(query2);
+		
 		st.close();
 		connection.close();
-		
 	}
 
 	/**
-	 * This function returns true if the string is an integer, false otherwise
-	 * 
-	 * @param number
-	 *            string number
+	 * This function returns true if the string is an integer, false otherwise.
+	 *
+	 * @param number string that must be a  number.
 	 * @return true if the string is an integer, false otherwise
 	 */
 	private static Boolean isInt(String number) {
-
+		
 		try {
 			int num = Integer.parseInt(number);
 			if (num < 0 || num > 999999)

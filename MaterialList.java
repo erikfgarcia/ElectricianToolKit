@@ -1,5 +1,5 @@
 /**
- * 
+ * Materials node class
  * @author Erik F Garcia
  *
  */
