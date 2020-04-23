@@ -66,7 +66,7 @@ public class EstimateTool extends Pane {
 	static String url = "jdbc:mysql://localhost:3306/" + databaseName + "?useSSL=false";
 	static String url2 = "jdbc:mysql://localhost:3306/" + databaseName2 + "?useSSL=false";
 	static String username = "root";
-	static String password = "********"; //database password
+	static String password = "*******"; //database password
 	UIManager ui; // set scene from main program  
 	
 	/**
@@ -187,7 +187,6 @@ public class EstimateTool extends Pane {
 			total += 1.3 * Integer.parseInt(input2.getText());
 		}    
 
-				//---------
 				
 				//primaryStage.setScene(scene3);
 				ui.setScene(scene3);
