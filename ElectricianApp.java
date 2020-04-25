@@ -57,7 +57,7 @@ public class ElectricianApp extends Application {
 		
 		//VBox mainBox = new VBox(5);
 		//mainBox.setAlignment(Pos.CENTER);
-		
+			
 		Label mainLabel = new Label("Electrical Resources:");
 		mainLabel.setId("MainLabel");
 		VBox labelBox = new VBox(mainLabel);
@@ -78,7 +78,7 @@ public class ElectricianApp extends Application {
 		//FilteredDropDown estimateDrop = new FilteredDropDown("Estimates", ui);
 		//estimateDrop.setToExternal(new EstimateTool(ui));
 		//estimateDrop.setToExternal(new Label("Test"));
-		EstimateTool estimate = new EstimateTool(ui);
+		EstimateTool estimate = new EstimateTool(ui); 
 		Button estimateDrop = new Button("Estimates");
 		estimateDrop.setId("DropButton");
 		estimateDrop.setPrefSize(400, 60);
@@ -164,7 +164,7 @@ public class ElectricianApp extends Application {
 		// initial size of program window
 		primaryStage.setWidth(630);
 		primaryStage.setHeight(675);
-		
+	
 		outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().subtract(13.5));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().subtract(13.5));
 		mainScroll.prefHeightProperty().bind(outermostBox.heightProperty().subtract(50));
