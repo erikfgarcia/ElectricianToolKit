@@ -72,8 +72,12 @@ public class ElectricianApp extends Application {
 		notesDrop.add(notes);
 		
 		FilteredDropDown ohmsDrop = new FilteredDropDown("Ohm's Law", ui);
+		OhmsTool olt = new OhmsTool(ui);
+		ohmsDrop.add(olt);
 		
 		FilteredDropDown circuitsDrop = new FilteredDropDown("Circuits", ui);
+		CircuitsTool ct = new CircuitsTool(ui);
+		circuitsDrop.add(ct);
 		
 		//FilteredDropDown estimateDrop = new FilteredDropDown("Estimates", ui);
 		//estimateDrop.setToExternal(new EstimateTool(ui));
