@@ -7,7 +7,7 @@
  * 
  * Errors/Requirements:
  * 		- scroll bars being cut out of window [Partially fixed]
- * 		- make ohms/circuits/voltage-drop tools
+ * 		- make voltage-drop tools
  * 		- refine UI
  * 
  */
@@ -57,7 +57,7 @@ public class ElectricianApp extends Application {
 		
 		//VBox mainBox = new VBox(5);
 		//mainBox.setAlignment(Pos.CENTER);
-			
+		
 		Label mainLabel = new Label("Electrical Resources:");
 		mainLabel.setId("MainLabel");
 		VBox labelBox = new VBox(mainLabel);
@@ -72,22 +72,24 @@ public class ElectricianApp extends Application {
 		notesDrop.add(notes);
 		
 		FilteredDropDown ohmsDrop = new FilteredDropDown("Ohm's Law", ui);
-		OhmsTool olt = new OhmsTool(ui);
-		ohmsDrop.add(olt);
+		OhmsTool ohms = new OhmsTool(ui);
+		ohmsDrop.add(ohms);
 		
 		FilteredDropDown circuitsDrop = new FilteredDropDown("Circuits", ui);
-		CircuitsTool ct = new CircuitsTool(ui);
-		circuitsDrop.add(ct);
+		CircuitsTool circuits = new CircuitsTool(ui);
+		circuitsDrop.add(circuits);
 		
-		//FilteredDropDown estimateDrop = new FilteredDropDown("Estimates", ui);
-		//estimateDrop.setToExternal(new EstimateTool(ui));
-		//estimateDrop.setToExternal(new Label("Test"));
-		EstimateTool estimate = new EstimateTool(ui); 
+		FilteredDropDown voltageDrop = new FilteredDropDown("Voltage Drop", ui);
+		//VoltageDropTool voltage = new VoltageDropTool(ui);
+		//voltageDropDrop.add(circuits);
+		
+		EstimateTool estimate = new EstimateTool(ui);
 		Button estimateDrop = new Button("Estimates");
 		estimateDrop.setId("DropButton");
 		estimateDrop.setPrefSize(400, 60);
-	   	estimateDrop.setOnAction(e-> {		
-			ui.setScene(estimate.getPrimaryScene());							
+	    estimateDrop.setOnAction(e-> {		
+			//ui.setScene(estimate.getPrimaryScene());	
+	    	ui.setScene(new StyledScene(new ExternalPage(ui, estimate)).getScene());
 		});
 		
 		FilteredDropDown calcDrop = new FilteredDropDown("Calculator", ui);
@@ -106,6 +108,7 @@ public class ElectricianApp extends Application {
 		listItems.add(favoritesDrop);
 		listItems.add(ohmsDrop);
 		listItems.add(circuitsDrop);
+		listItems.add(voltageDrop);
 		listItems.add(estimateDrop);
 		listItems.add(calcDrop);
 		listItems.add(historyDrop);
@@ -113,44 +116,16 @@ public class ElectricianApp extends Application {
 		
 		SettingsManager sm = new SettingsManager(ui, favorites, 
 				history, notes);
-		sm.loadSettings();
 		ui.setSettingsManager(sm);
-		//ui.setTools(favorites, ohms, circuits, estimate, calculator, history, notes);
-		ui.setTools(favorites, calculator, history, notes);
-		
-		
-		//VBox outerWrap = new VBox(mainBox);
-		//outerWrap.setId("ContentBox");
-		//VBox.setMargin(mainBox, new Insets(60,60,60,60));
-		//outerWrap.setAlignment(Pos.CENTER);
-		
-		//ScrollPane mainScroll = new ScrollPane(outerWrap);
-		//outerWrap.translateXProperty().bind(mainScroll.widthProperty().subtract(outerWrap.widthProperty()).divide(2));					
-		
-		//mainScroll.setMaxHeight(600);
-		//mainScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-		//mainScroll.setBackground(Background.EMPTY);
+		ui.setTools(favorites, ohms, circuits, estimate, calculator, 
+				history, notes);
+		ui.loadSettings();
+		//ui.setTools(favorites, ohms, circuits, voltage, estimate, calculator, 
+		//		history, notes);
 		
 		
 		MainBar mainBar = new MainBar(ui);
 		
-		/*MenuItem view0 = new MenuItem("Tabs");
-		view0.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				ui.setToTabs();
-			}
-		});
-		
-		MenuItem view1 = new MenuItem("Pages");
-		view1.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				//System.out.println("view 1 chosen");
-				ui.setToPages();
-			}
-		});
-	
-		MenuButton view = new MenuButton("View", null, view0, view1);
-		mainBar.addNode(view);*/
 		
 		Node[] nodes = new Node[listItems.size()];
 		for(int i=0; i<nodes.length; i++)
@@ -167,8 +142,8 @@ public class ElectricianApp extends Application {
 		
 		// initial size of program window
 		primaryStage.setWidth(630);
-		primaryStage.setHeight(675);
-	
+		primaryStage.setHeight(740);
+		
 		outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().subtract(13.5));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().subtract(13.5));
 		mainScroll.prefHeightProperty().bind(outermostBox.heightProperty().subtract(50));
@@ -192,12 +167,14 @@ public class ElectricianApp extends Application {
 
 }
 
-/*
- * 
- * UI Manager
- * 
- */
 
+
+/**
+ * Manages program aspects that require inter-connectedness, primarily in terms
+ * 	of UI updates
+ * @author RyanS
+ *
+ */
 class UIManager {
 	
 	Stage primary;
@@ -280,18 +257,31 @@ class UIManager {
 	}
 	
 	public Tool getToolByName(String name) {
-		if(name == "Calculator") {
+		name = name.trim();
+		//System.out.println("Tool name: "+name);
+		
+		if(name.equals("Calculator")) {
+			//System.out.println("  => Calc Tool");
 			return new CalculatorTool(this);
 		}
-		else if(name == "") {
-			
+		else if(name.equals("Ohm's Law")) {
+			//System.out.println("  => Ohm's Tool");
+			return new OhmsTool(this);
+		}
+		else if(name.equals("Circuits")) {
+			return new CircuitsTool(this);
+		}
+		else if(name.equals("Voltage Drop")) {
+			//return new VoltageDropTool(this);
 		}
 		
 		return null;
 	}
 	
 	public String[] getToolNames() {
-		String[] names = {"",
+		String[] names = {"Ohm's Law",
+				"Circuits",
+				"Voltage Drop",
 				"Calculator"};
 		
 		return names;
@@ -326,6 +316,10 @@ class UIManager {
 		}
 	}
 	
+	public void loadSettings() {
+		this.settings.loadSettings();
+	}
+	
 }
 
 
@@ -336,6 +330,12 @@ class UIManager {
  * 
  */
 
+/**
+ * Base drop down button, includes some styling/formatting.
+ * 
+ * @author RyanS
+ *
+ */
 class DropDown extends Region {
 	
 	VBox outerBox;
@@ -451,6 +451,13 @@ class DropDown extends Region {
 	
 }
 
+/**
+ * A modified DropDown to use in a specific way regarding UI management.
+ * 		Primarily for displaying content in external pages rather than tabs.
+ * 
+ * @author RyanS
+ *
+ */
 class FilteredDropDown extends Region {
 	
 	UIManager ui;
@@ -485,18 +492,6 @@ class FilteredDropDown extends Region {
 							ui.resetScene();
 						}
 					});
-					
-					/*
-					ToolBar bar = new ToolBar(back);
-					CustomScroll scroll = new CustomScroll(drop);
-					VBox wrap = new VBox(bar, scroll);
-					wrap.setId("MainBox");
-					
-					wrap.prefWidthProperty().bind(ui.getStage().widthProperty().subtract(13.5));
-					wrap.prefHeightProperty().bind(ui.getStage().heightProperty().subtract(13.5));
-					scroll.prefHeightProperty().bind(wrap.heightProperty().subtract(50));
-					
-					drop.dropContent();*/
 					
 					drop.dropContent();
 					ExternalPage page = new ExternalPage(ui, drop);
@@ -546,7 +541,7 @@ class FilteredDropDown extends Region {
 }
 
 /**
- * External page custom pane
+ * External page custom pane, uses SubBar and CustomScroll.
  * 
  * @author RyanS
  *
@@ -610,7 +605,12 @@ class ExternalPage extends VBox {
 	
 }
 
-
+/**
+ * Base tool bar format.
+ * 
+ * @author RyanS
+ *
+ */
 class ToolBar extends HBox {
 	
 	public ToolBar() {
@@ -644,6 +644,12 @@ class ToolBar extends HBox {
 	
 }
 
+/**
+ * Tool bar for main menu.
+ * 
+ * @author RyanS
+ *
+ */
 class MainBar extends ToolBar {
 		
 	UIManager ui;
@@ -695,6 +701,12 @@ class MainBar extends ToolBar {
 	
 }
 
+/**
+ * Tool bar for external pages.
+ * 
+ * @author RyanS
+ *
+ */
 class SubBar extends ToolBar {
 	
 	UIManager ui;
@@ -730,7 +742,8 @@ class SubBar extends ToolBar {
 
 
 /**
- * Pre-styled scene
+ * Pre-styled scene.
+ * 
  * @author RyanS
  *
  */
@@ -765,6 +778,12 @@ class StyledScene {
 }
 
 
+/**
+ * Customized scroll pane.
+ * 
+ * @author RyanS
+ *
+ */
 class CustomScroll extends ScrollPane {
 	
 	VBox mainBox;
@@ -806,7 +825,8 @@ class CustomScroll extends ScrollPane {
 }
 
 /**
- * VBox of CheckBox nodes
+ * VBox of CheckBox nodes.
+ * 
  * @author RyanS
  *
  */
@@ -955,6 +975,7 @@ class CheckList extends VBox {
 
 
 /**
+ * Select from all compatible tools to add to a quick-access, consolidated list.
  * 
  * @author RyanS
  *
@@ -1017,6 +1038,7 @@ class FavoritesTool extends Pane {
 		// check check box and add by name...
 		for(int i=0; i<checkArr.length; i++) {
 			if(checkArr[i] == 1) {
+				//System.out.println("  => checked: " +names[i]);
 				Tool tool = ui.getToolByName(names[i]);
 				//System.out.println("Tool: "+tool.getClass().getSimpleName());
 				
@@ -1054,7 +1076,7 @@ class FavoritesTool extends Pane {
 }
 
 /**
- * 
+ * A basic note pad that can be cleared and written freely to.
  * @author RyanS
  *
  */
@@ -1091,7 +1113,8 @@ class NotesTool extends Pane {
 }
 
 /**
- * 
+ * Acts as a collection of printed result statement from the compatible
+ * 		tools.
  * @author RyanS
  *
  */
@@ -1282,10 +1305,11 @@ class SettingsManager {
 	FavoritesTool favorites; 
 	HistoryTool history; 
 	NotesTool notes;
-	File viewFile = new File("view.txt");
-	File favoritesFile = new File("favorites.txt");
-	File historyFile = new File("history.txt");
-	File notesFile = new File("notes.txt");
+	File settingsFolder = new File("ETK_User_Settings");
+	File viewFile = new File(settingsFolder.getName()+"/view.txt");
+	File favoritesFile = new File(settingsFolder.getName()+"/favorites.txt");
+	File historyFile = new File(settingsFolder.getName()+"/history.txt");
+	File notesFile = new File(settingsFolder.getName()+"/notes.txt");
 	
 	public SettingsManager(UIManager ui, FavoritesTool favorites, 
 			HistoryTool history, NotesTool notes) {
@@ -1322,6 +1346,9 @@ class SettingsManager {
 	
 	public boolean checkFiles() {
 		try {
+			if(!settingsFolder.exists())
+				settingsFolder.mkdir();
+			
 			if(!viewFile.exists())
 				viewFile.createNewFile();
 			
@@ -1378,9 +1405,10 @@ class SettingsManager {
 				for(int i=0; i<names.length; i++) {
 					//System.out.println("*"+name +" == "+names[i]+"*");
 					
-					if(name.equals(names[i]))
+					if((name.trim()).equals(names[i])) {
 						checks[i] = 1;
-					else checks[i] = 0;
+						//System.out.println("  => Add: "+names[i]);
+					}
 				}
 			}
 			
