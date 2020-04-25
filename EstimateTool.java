@@ -184,7 +184,7 @@ public class EstimateTool{
 			} else {
 				
 				//with database
-				try {
+/*				try {
 					 if (Integer.parseInt(input1.getText())!=0)
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(input1.getText()));
 					 
@@ -195,9 +195,9 @@ public class EstimateTool{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				 
+*/				 
 	//without database				 
-/*		if (Integer.parseInt(input1.getText())!=0) {		 
+/**/		if (Integer.parseInt(input1.getText())!=0) {		 
 			currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(input1.getText())));
 				 total += 0.9 * Integer.parseInt(input1.getText());
 		}
@@ -206,7 +206,7 @@ public class EstimateTool{
 			currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(input2.getText())));
 			total += 1.3 * Integer.parseInt(input2.getText());
 		}    
-*/				
+/**/				
 				//primaryStage.setScene(scene3);
 				ui.setScene(scene3);
 			} 
@@ -322,7 +322,7 @@ public class EstimateTool{
 				} 
 				
 				//without database
-/*				if (Integer.parseInt(recNum1.getText())!=0) {		 
+/**/				if (Integer.parseInt(recNum1.getText())!=0) {		 
 					currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum1.getText())));
 						 total += 0.9 * Integer.parseInt(recNum1.getText());
 				}
@@ -332,8 +332,8 @@ public class EstimateTool{
 					total += 1.3 * Integer.parseInt(recNum2.getText());
 				}
 				
-*/				
-				try {
+/**/				
+/*				try {
 					if (applianceBranchCircuit(Integer.parseInt(recNum1.getText()),
 							Integer.parseInt(recNum2.getText())) == 0) {
 						currentList.clear();
@@ -343,7 +343,7 @@ public class EstimateTool{
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-			
+*/			
 				showList(ui);
 			}
 		});
@@ -575,7 +575,7 @@ public class EstimateTool{
 				
 				 
 				 //without database 
-/*					if (Integer.parseInt(recNum5.getText())!=0) {		 
+/**/					if (Integer.parseInt(recNum5.getText())!=0) {		 
 						currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum5.getText())));
 							 total += 0.9 * Integer.parseInt(recNum5.getText());
 					}
@@ -584,9 +584,9 @@ public class EstimateTool{
 						currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(recNum5.getText())));
 						total += 1.3 * Integer.parseInt(recNum6.getText());
 					} 
-*/
+/**/
 				
-				try {
+/*				try {
 					if (bathLoundry(Integer.parseInt(recNum5.getText()), Integer.parseInt(recNum6.getText()), isBath) == 0) {
 						currentList.clear();
 					}
@@ -595,7 +595,7 @@ public class EstimateTool{
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-
+*/
 				showList(ui);
 			}
 
@@ -930,23 +930,23 @@ public class EstimateTool{
 		}
         
 		//with database
-		if(numberOfCircuits!=0) {
+/*		if(numberOfCircuits!=0) {
 			addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	addPriceToCurrentList("Wire", "12-2", temp);}
 			else if(breakerSide == 15) { addPriceToCurrentList("Wire", "14-2", temp);}		
 		}
-		
+*/		
 		//without database
-/*		if(numberOfCircuits!=0) {
+/**/		if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", "" + breakerSide + "-Amp 1-Pole", 8.5, numberOfCircuits));					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	currentList.add(new MaterialList("Wire", "12-2", 0.23, temp)); total += 0.23*temp;}
 			else if(breakerSide == 15) { currentList.add(new MaterialList("Wire", "14-2", 0.3, temp)); total += 0.23*temp;}	
 		} 
-*/
+/**/
 		message = "Total circuits: " + numberOfCircuits + "  Ligth circuits: " + numOfLighCircuit
 				+ "  Receptacle Circuits: " + numOfRecCircuit + "  Mixed circuits: " + mixCir;	
 
@@ -980,20 +980,20 @@ public class EstimateTool{
 			numberOfCircuits++;
 
 		//with database 
-		if(numberOfCircuits!=0) {
+/*		if(numberOfCircuits!=0) {
 			 addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);
 			 int temp = 10 *(dT + dD); 
 			 addPriceToCurrentList("Wire", "12-2", temp);
 		 } 
-		 
+*/		 
 		//without database
-/*		 if(numberOfCircuits!=0) {
+/**/		 if(numberOfCircuits!=0) {
 			 currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			 int temp = 10 *(dT + dD); 
 			 currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			 total += 1.3*temp;
 		 } 
-*/			
+/**/			
 		message = "Total circuits: " + numberOfCircuits+ " (Kitchen)";	
 		return numberOfCircuits;
 	}
@@ -1105,7 +1105,7 @@ public class EstimateTool{
 			numberOfCircuits++;
 		
 		//with database
-		if(isBath) {
+/*		if(isBath) {
 			if(numberOfCircuits!=0) {
 				addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole GFCI",  numberOfCircuits);
 				int temp = 10 *(dT + dD); 
@@ -1120,14 +1120,15 @@ public class EstimateTool{
 				bth = "Laundry";
 			}
 		}
+*/	
 		//without database
-/*		if(numberOfCircuits!=0) {
+/**/		if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			int temp = 10 *(dT + dD);
 			currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			total += 1.3*temp;
 		} 
-*/		
+/**/		
 		message = "Total circuits: " + numberOfCircuits +" ("+bth+")";
 		return numberOfCircuits;
 	}
