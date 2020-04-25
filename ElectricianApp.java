@@ -41,6 +41,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
@@ -143,6 +144,8 @@ public class ElectricianApp extends Application {
 		// initial size of program window
 		primaryStage.setWidth(630);
 		primaryStage.setHeight(740);
+		primaryStage.setMinWidth(300);
+		primaryStage.setMinHeight(200);
 		
 		outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().subtract(13.5));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().subtract(13.5));
@@ -310,10 +313,12 @@ class UIManager {
 				tool.clearDisplay();
 			}
 			catch(Exception e) {
-				// not a sub-tool, cannot clear
+				// not a sub-tool, cannot clear unless favorites tool
 				continue;
 			}
 		}
+		
+		settings.getFavorites().clearAll();
 	}
 	
 	public void loadSettings() {
@@ -558,6 +563,7 @@ class ExternalPage extends VBox {
 		this.ui = UIM;
 		
 		CustomScroll contentScroll = new CustomScroll();
+		VBox.setMargin(contentScroll, new Insets(5,5,5,5));
 		SubBar sub = new SubBar(ui);
 		
 		this.scroll = contentScroll;
@@ -566,6 +572,10 @@ class ExternalPage extends VBox {
 		this.prefWidthProperty().bind(ui.getStage().widthProperty().subtract(13.5));
 		this.prefHeightProperty().bind(ui.getStage().heightProperty().subtract(13.5));
 		scroll.prefHeightProperty().bind(this.heightProperty().subtract(50));
+		//scroll.prefWidthProperty().bind(this.heightProperty().subtract(5));
+		
+		//scroll.prefHeightProperty().bind(ui.getStage().widthProperty().subtract(13.5));
+		//scroll.prefWidthProperty().bind(ui.getStage().heightProperty().subtract(13.5));
 		
 		this.getChildren().addAll(bar, scroll);
 	}
@@ -696,7 +706,91 @@ class MainBar extends ToolBar {
 		MenuButton view = new MenuButton("View", null, view0, view1);
 		//mainBar.addNode(view);
 		
-		return (new Node[]{save,clear,close, view});
+		VBox infoNotes = new VBox();
+		infoNotes.setSpacing(10);
+		
+		Label infoLabel = new InfoLabel("Electrician ToolKit Information:");
+		infoLabel.setAlignment(Pos.CENTER);
+		infoNotes.getChildren().add(infoLabel);
+		
+		infoNotes.getChildren().add(new InfoText("Save: saves all saveable settings "
+				+ "(View, Favorites, History, Notes)"));
+		infoNotes.getChildren().add(new InfoText("Clear: clears all input from all"
+				+ " 'sub-tools' (Ohm's Law, Circuits, Voltage Drop), including"
+				+ " favorited tools"));
+		infoNotes.getChildren().add(new InfoText("Close: closes all open tabs, if "
+				+ "view is in Tab view"));
+		infoNotes.getChildren().add(new InfoText("View: change view between"
+				+ " tabs and pages for all compatible tools"));
+		infoNotes.getChildren().add(new InfoText("Settings: a folder is created in "
+				+ "same directory as program that stores files for each"
+				+ " saveable setting to load from and save to"));
+		infoNotes.getChildren().add(new InfoText("Calculator: solves basic "
+				+ "mathematical equations, supports addition, subtraction, "
+				+ "multiplication, division, powers ('x^n'), "
+				+ "grouping ('(' and ')'), and negation (ex: '-5'). Displays"
+				+ " 'ERROR' if input equation is not solvable with this tool"));
+		infoNotes.getChildren().add(new InfoText("History: stores printed results"
+				+ " from compatible tools (sub-tools)"));
+		infoNotes.getChildren().add(new InfoText("Notes: custom note pad to freely"
+				+ " write to"));
+		//infoNotes.getChildren().add(new InfoText(""));
+		
+		Button info = new Button("Info");
+		info.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				ui.setScene((new StyledScene(new ExternalPage(ui, infoNotes))).getScene());
+			}
+		});
+		
+		return (new Node[]{save,clear,close, view, info});
+	}
+	
+}
+
+/**
+ * Custom text component used for MainBar's Info page.
+ * 
+ * @author RyanS
+ *
+ */
+class InfoText extends Text {
+	
+	double MAX_WIDTH = 400;
+	double STROKE = 12;
+	
+	public InfoText() {
+		super();
+		this.wrappingWidthProperty().set(MAX_WIDTH);
+		this.setStrokeWidth(STROKE);
+	}
+	
+	public InfoText(String name) {
+		super(name);
+		this.wrappingWidthProperty().set(MAX_WIDTH);
+		this.setStrokeWidth(STROKE);
+	}
+	
+}
+
+/**
+ * Custom label component used for MainBar's Info page.
+ * 
+ * @author RyanS
+ *
+ */
+class InfoLabel extends Label {
+	
+	double MAX_WIDTH = 400;
+	
+	public InfoLabel() {
+		super();
+		this.setMaxWidth(500);
+	}
+	
+	public InfoLabel(String name) {
+		super(name);
+		this.setMaxWidth(500);
 	}
 	
 }
@@ -986,17 +1080,25 @@ class FavoritesTool extends Pane {
 	DropDown modify;
 	DropDown toolDrop;
 	CheckList checks;
+	ArrayList<Tool> tools;
 	
 	public FavoritesTool(UIManager ui) {
 		this.ui = ui;
 		checks = new CheckList();
 		checks.setSpacing(3);
+		tools = new ArrayList<Tool>();
 		
 		// updates tool list according to check boxes
 		Button update = new Button("Update");
-		update.setPrefSize(100, 30);
+		update.setPrefSize(80, 30);
 		update.setOnAction(e -> {
 			setFavorites(checks.getIntArray(), checks.getNameArray());
+		});
+		
+		Button clear = new Button("Clear");
+		clear.setPrefSize(65, 30);
+		clear.setOnAction(e -> {
+			clearAll();
 		});
 		
 		//Check Boxes
@@ -1012,10 +1114,10 @@ class FavoritesTool extends Pane {
 		modify = new DropDown("Modify", 200, 30);
 		modify.add(checksWrap);
 		
-		toolDrop = new DropDown("Tools", 305, 30);
-		
-		HBox modBox = new HBox(modify, update);
+		HBox modBox = new HBox(modify, update, clear);
 		modBox.setSpacing(5);
+		
+		toolDrop = new DropDown("Tools", 355, 30);
 		
 		VBox wrap = new VBox(modBox, toolDrop);
 		//VBox.setMargin(toolDrop, new Insets(40, 20, 20, 20));
@@ -1029,6 +1131,7 @@ class FavoritesTool extends Pane {
 	
 	public void setFavorites(int[] checkArr, String[] names) {
 		toolDrop.clearDrop();
+		tools.clear();
 		
 		if(checkArr.length != names.length)
 			System.out.println("Error: setting favorites");
@@ -1042,8 +1145,10 @@ class FavoritesTool extends Pane {
 				Tool tool = ui.getToolByName(names[i]);
 				//System.out.println("Tool: "+tool.getClass().getSimpleName());
 				
-				if(tool != null) 
+				if(tool != null) {
 					toolDrop.add(tool);
+					tools.add(tool);
+				}
 			}
 		}
 		
@@ -1051,6 +1156,12 @@ class FavoritesTool extends Pane {
 	
 	public void uncheckAll() {
 		checks.uncheckAll();
+	}
+	
+	public void clearAll() {
+		for(int i=0; i<tools.size(); i++) {
+			tools.get(i).clearDisplay();
+		}
 	}
 	
 	public void checkByNames(String...names) {
