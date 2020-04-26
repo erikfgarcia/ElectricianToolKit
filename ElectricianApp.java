@@ -716,8 +716,8 @@ class MainBar extends ToolBar {
 		infoNotes.getChildren().add(new InfoText("Save: saves all saveable settings "
 				+ "(View, Favorites, History, Notes)"));
 		infoNotes.getChildren().add(new InfoText("Clear: clears all input from all"
-				+ " 'sub-tools' (Ohm's Law, Circuits, Voltage Drop), including"
-				+ " favorited tools"));
+				+ " 'sub-tools' (Ohm's Law, Circuits, Voltage Drop, Calculator), "
+				+ "including favorited tools"));
 		infoNotes.getChildren().add(new InfoText("Close: closes all open tabs, if "
 				+ "view is in Tab view"));
 		infoNotes.getChildren().add(new InfoText("View: change view between"
@@ -732,7 +732,7 @@ class MainBar extends ToolBar {
 				+ " 'ERROR' if input equation is not solvable with this tool"));
 		infoNotes.getChildren().add(new InfoText("History: stores printed results"
 				+ " from compatible tools (sub-tools)"));
-		infoNotes.getChildren().add(new InfoText("Notes: custom note pad to freely"
+		infoNotes.getChildren().add(new InfoText("Notes: basic note pad to freely"
 				+ " write to"));
 		//infoNotes.getChildren().add(new InfoText(""));
 		
