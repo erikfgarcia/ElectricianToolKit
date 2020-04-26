@@ -89,8 +89,8 @@ public class ElectricianApp extends Application {
 		estimateDrop.setId("DropButton");
 		estimateDrop.setPrefSize(400, 60);
 	    estimateDrop.setOnAction(e-> {		
-			//ui.setScene(estimate.getPrimaryScene());	
-	    	ui.setScene(new StyledScene(new ExternalPage(ui, estimate)).getScene());
+			ui.setScene(estimate.getPrimaryScene());	
+	    	//ui.setScene(new StyledScene(new ExternalPage(ui, estimate)).getScene());
 		});
 		
 		FilteredDropDown calcDrop = new FilteredDropDown("Calculator", ui);
@@ -118,7 +118,7 @@ public class ElectricianApp extends Application {
 		SettingsManager sm = new SettingsManager(ui, favorites, 
 				history, notes);
 		ui.setSettingsManager(sm);
-		ui.setTools(favorites, ohms, circuits, estimate, calculator, 
+		ui.setTools(favorites, ohms, circuits, calculator, 
 				history, notes);
 		ui.loadSettings();
 		//ui.setTools(favorites, ohms, circuits, voltage, estimate, calculator, 
