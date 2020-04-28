@@ -87,7 +87,7 @@ public class ElectricianApp extends Application {
 		EstimateTool estimate = new EstimateTool(ui);
 		Button estimateDrop = new Button("Estimates");
 		estimateDrop.setId("DropButton");
-		estimateDrop.setPrefSize(400, 60);
+		estimateDrop.setPrefSize(490, 60);
 	    estimateDrop.setOnAction(e-> {		
 			ui.setScene(estimate.getPrimaryScene());	
 	    	//ui.setScene(new StyledScene(new ExternalPage(ui, estimate)).getScene());
@@ -141,10 +141,10 @@ public class ElectricianApp extends Application {
 		//StyledScene mainScene = new StyledScene(mainBar, mainScroll);
 		
 		// initial size of program window
-		primaryStage.setWidth(630);
+		primaryStage.setWidth(720);
 		primaryStage.setHeight(740);
-		primaryStage.setMinWidth(300);
-		primaryStage.setMinHeight(200);
+		primaryStage.setMinWidth(500);
+		primaryStage.setMinHeight(300);
 		
 		outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().subtract(13.5));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().subtract(13.5));
@@ -367,7 +367,7 @@ class DropDown extends Region {
 		
 		button= new Button(name);
 		button.setId("DropButton");
-		button.setPrefSize(400, 60);
+		button.setPrefSize(490, 60);
 		
 		button.setOnAction(defaultClick);
 		
