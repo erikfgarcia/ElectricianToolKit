@@ -61,7 +61,7 @@
 	-fx-margin: 10px;
 }
 
-#MainLabel {
+#ContentBox #MainLabel {
 	-fx-font-family: "Helvetica";
 	-fx-font-weight: bold;
 	-fx-font-size: 20px;
@@ -173,7 +173,6 @@
     -fx-font-size: 12px;
 }
 
-
 /* Estimate  Class */ 
 
 #estButton:hover{
@@ -214,11 +213,6 @@
 #estBackground {
 	-fx-background-color: linear-gradient(rgb(150, 150, 150), rgb(160,160,160));
 }
-
-
-
-
-
 
 
 
