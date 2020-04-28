@@ -7,8 +7,8 @@
  * 
  * Errors/Requirements:
  * 		- scroll bars being cut out of window [Partially fixed]
- * 		- make voltage-drop tools
  * 		- refine UI
+ * 		- finish info section
  * 
  */
 
@@ -81,8 +81,8 @@ public class ElectricianApp extends Application {
 		circuitsDrop.add(circuits);
 		
 		FilteredDropDown voltageDrop = new FilteredDropDown("Voltage Drop", ui);
-		//VoltageDropTool voltage = new VoltageDropTool(ui);
-		//voltageDropDrop.add(circuits);
+		VoltageDropTool voltage = new VoltageDropTool(ui);
+		voltageDrop.add(voltage);
 		
 		EstimateTool estimate = new EstimateTool(ui);
 		Button estimateDrop = new Button("Estimates");
@@ -117,12 +117,11 @@ public class ElectricianApp extends Application {
 		
 		SettingsManager sm = new SettingsManager(ui, favorites, 
 				history, notes);
-		ui.setSettingsManager(sm);
-		ui.setTools(favorites, ohms, circuits, calculator, 
+		ui.setTools(favorites, ohms, circuits, voltage, calculator, 
 				history, notes);
+		ui.setSettingsManager(sm);
 		ui.loadSettings();
-		//ui.setTools(favorites, ohms, circuits, voltage, estimate, calculator, 
-		//		history, notes);
+		
 		
 		
 		MainBar mainBar = new MainBar(ui);
@@ -274,8 +273,8 @@ class UIManager {
 		else if(name.equals("Circuits")) {
 			return new CircuitsTool(this);
 		}
-		else if(name.equals("Voltage Drop")) {
-			//return new VoltageDropTool(this);
+		else if(name.equals("Voltage Drop Calculator")) {
+			return new VoltageDropTool(this);
 		}
 		
 		return null;
@@ -284,7 +283,7 @@ class UIManager {
 	public String[] getToolNames() {
 		String[] names = {"Ohm's Law",
 				"Circuits",
-				"Voltage Drop",
+				"Voltage Drop Calculator",
 				"Calculator"};
 		
 		return names;
@@ -734,6 +733,17 @@ class MainBar extends ToolBar {
 				+ " from compatible tools (sub-tools)"));
 		infoNotes.getChildren().add(new InfoText("Notes: basic note pad to freely"
 				+ " write to"));
+		infoNotes.getChildren().add(new InfoText("Estimate: give practical estimates"
+				+ " for a variety of different situations and circuit types"));
+		infoNotes.getChildren().add(new InfoText("Ohm's Law: use various "
+				+ "interpretations of Ohm's Law to calculate values of resistance,"
+				+ " voltage, current, and power"));
+		infoNotes.getChildren().add(new InfoText("Circuits: calculate equivalent "
+				+ "component given two component values for either "
+				+ "series or parallel circuits"));
+		infoNotes.getChildren().add(new InfoText("Voltage Drop: estimate voltage "
+				+ "drop in a circuuit based on various parameters such as"
+				+ " material, wire length, and current"));
 		//infoNotes.getChildren().add(new InfoText(""));
 		
 		Button info = new Button("Info");
