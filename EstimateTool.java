@@ -36,7 +36,7 @@ import javafx.stage.Stage;
  * @author Erik F Garcia
  *
  */
-public class EstimateTool{
+public class EstimateTool extends Pane{
 	//static Stage primaryStage;
 	static Scene scene1;
 	static Scene scene2;
@@ -145,19 +145,19 @@ public class EstimateTool{
 		Button back = new Button("Back");
 		back.setPrefSize(BW, BH);
 		back.setId("estButton");
-		back.setAlignment(Pos.CENTER);
+//		back.setAlignment(Pos.CENTER);
 		back.setOnAction(e -> ui.resetScene());
 
 		Label menu1 = new Label("Select A Circuit Type");
 		menu1.setId("estText");
 		menu1.setAlignment(Pos.BASELINE_CENTER);
 		VBox layout1 = new VBox(10);
-	//	layout1.setAlignment(Pos.CENTER);
+		//layout1.setAlignment(Pos.CENTER);
 	    layout1.getStylesheets().add(STYLE);
 	    layout1.setId("estBackground");
 		layout1.getChildren().addAll(back, menu1, gpc, abc, ic, bl, saved );
-		scene1 = new Scene(layout1, 700, 700);
-		//scene1 = new Scene(layout1);
+		//scene1 = new Scene(layout1, 700, 700);
+		scene1 = new Scene(layout1);
 	
 	    
 		// --------------------------------------------------//
@@ -187,11 +187,17 @@ public class EstimateTool{
 				
 				//with database
 /**/				try {
-					 if (Integer.parseInt(input1.getText())!=0)
+					 if (Integer.parseInt(input1.getText())!=0) {
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(input1.getText()));
+						addPriceToCurrentList("1-gang box", "Old/New Work", Integer.parseInt(input1.getText()));
+						addPriceToCurrentList("Wall Plate", "1-Gang Outlet", Integer.parseInt(input1.getText()));
+					 }
 					 
-					 if(Integer.parseInt(input2.getText())!=0)
+					 if(Integer.parseInt(input2.getText())!=0) {
 					     addPriceToCurrentList("Receptacle", "Double Duplex", Integer.parseInt(input2.getText()));
+					     addPriceToCurrentList("2-gang box", "Old/New Work", Integer.parseInt(input2.getText()));
+					     addPriceToCurrentList("Wall Plate", "2-Gang Outlet", Integer.parseInt(input2.getText()));
+					 }
 				} catch (NumberFormatException | InstantiationException | IllegalAccessException
 						| ClassNotFoundException | SQLException e1) {
 					// TODO Auto-generated catch block
@@ -223,9 +229,9 @@ public class EstimateTool{
 		Label receptacles2 = new Label("How many double duplex receptacles?");
 		Label luminaries = new Label("Enter the lighting load sum in watts");
 		VBox layout2 = new VBox(5);
-		layout2.setAlignment(Pos.CENTER);
-		layout2.prefWidthProperty().bind(ui.getScene().widthProperty().subtract(13.5));
-		layout2.prefWidthProperty().bind(ui.getScene().widthProperty().subtract(13.5));
+		//layout2.setAlignment(Pos.CENTER);
+		//layout2.prefWidthProperty().bind(ui.getScene().widthProperty().subtract(13.5));
+		//layout2.prefWidthProperty().bind(ui.getScene().widthProperty().subtract(13.5));
 		layout2.getStylesheets().add(STYLE);
 		layout2.setId("estBackground");
 		layout2.getChildren().addAll(back2, receptacles1, input1, receptacles2, input2, luminaries, input3, submit);
@@ -311,12 +317,16 @@ public class EstimateTool{
 			} else {
 				//with database
 				try {
-					if(Integer.parseInt(recNum1.getText())!=0)
+					if(Integer.parseInt(recNum1.getText())!=0) {
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(recNum1.getText()));
-					
-					if(Integer.parseInt(recNum2.getText())!=0)
+						addPriceToCurrentList("1-gang box", "Old/New Work", Integer.parseInt(recNum1.getText()));
+						addPriceToCurrentList("Wall Plate", "1-Gang Outlet", Integer.parseInt(recNum1.getText()));
+					}
+					if(Integer.parseInt(recNum2.getText())!=0) {
 						addPriceToCurrentList("Receptacle", "Double Duplex", Integer.parseInt(recNum2.getText()));
-					
+						addPriceToCurrentList("2-gang box", "Old/New Work", Integer.parseInt(recNum2.getText()));
+						addPriceToCurrentList("Wall Plate", "2-Gang Outlet", Integer.parseInt(recNum2.getText()));
+					}
 				} catch (NumberFormatException | InstantiationException | IllegalAccessException
 						| ClassNotFoundException | SQLException e1) {
 					// TODO Auto-generated catch block
@@ -563,19 +573,23 @@ public class EstimateTool{
 		
 				//with database
 				 try {
-					 if(Integer.parseInt(recNum5.getText())!=0)
-					 addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(recNum5.getText()));
+					 if(Integer.parseInt(recNum5.getText())!=0) {
+						 addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(recNum5.getText()));
+					     addPriceToCurrentList("1-gang box", "Old/New Work", Integer.parseInt(recNum5.getText()));
+					     addPriceToCurrentList("Wall Plate", "1-Gang Outlet", Integer.parseInt(recNum5.getText()));
+					 }
 					 
-					 if( Integer.parseInt(recNum6.getText())!=0)
-					 addPriceToCurrentList("Receptacle", "Double Duplex", Integer.parseInt(recNum6.getText()));
-					 
+					 if( Integer.parseInt(recNum6.getText())!=0) {
+						 addPriceToCurrentList("Receptacle", "Double Duplex", Integer.parseInt(recNum6.getText()));
+						 addPriceToCurrentList("2-gang box", "Old/New Work", Integer.parseInt(recNum6.getText()));
+						 addPriceToCurrentList("Wall Plate", "2-Gang Outlet", Integer.parseInt(recNum6.getText()));
+					 }
 				} catch (NumberFormatException | InstantiationException | IllegalAccessException
 						| ClassNotFoundException | SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} 
 				
-				 
 				 //without database 
 /*					if (Integer.parseInt(recNum5.getText())!=0) {		 
 						currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum5.getText())));
@@ -626,7 +640,7 @@ public class EstimateTool{
 		exitInv.setOnAction(e -> ui.setScene(scene1) /* primaryStage.setScene(scene1)*/);
 
 		Label menuInv = new Label("Invalid Input!!! Please Enter Positive Integers in the Text Field");
-		menu1.setAlignment(Pos.CENTER);
+		//menu1.setAlignment(Pos.CENTER);
 
 		VBox layoutInv = new VBox(5);
 		//layoutInv.setAlignment(Pos.CENTER);
@@ -736,7 +750,7 @@ public class EstimateTool{
 		message2 = "Total: $"+total;
 		Text text = new Text(20, 20, message);
 		Text text2 = new Text(20, 20, message2);
-		Text text3 = new Text(20, 20,"You may also need: wire connectors, staples, tape, cover plates, swithes, wire crimps, ligth bulbs");
+		Text text3 = new Text(20, 20,"You may also need: wire connectors, staples, tape, swithes, wire crimps, ligth bulbs");
 		text.setId("estText");
 		text2.setId("estText");
 		VBox layout = new VBox(5);
@@ -848,7 +862,7 @@ public class EstimateTool{
 		total = 0.00;
 		Text text = new Text(20, 20, message);
 		Text text2 = new Text(20, 20, message2);
-		Text text3 = new Text(20, 20,"You may also need: wire connectors, staples, tape, cover plates, swithes, wire crimps, ligth bulbs");
+		Text text3 = new Text(20, 20,"You may also need: wire connectors, staples, tape, swithes, wire crimps, ligth bulbs");
 		text.setId("estText");
 		text2.setId("estText");
 		VBox layout = new VBox(5);
@@ -1019,6 +1033,8 @@ public class EstimateTool{
 			addPriceToCurrentList("Wire", "12-2", 100);
 			addPriceToCurrentList("Receptacle", "Duplex", 1);
 			addPriceToCurrentList("1-gang box", "Old/New Work", 1);
+			addPriceToCurrentList("Wall Plate", "1-Gang Outlet",1);
+			 
 			message = "Microwave Circuit";
 			break;
 		case 2:
@@ -1026,6 +1042,7 @@ public class EstimateTool{
 			addPriceToCurrentList("Wire", "10-3", 100 );
 			addPriceToCurrentList("Receptacle", "30A 125/250", 1 );
 			addPriceToCurrentList("2-gang box", "Old/New Work", 1 );
+			addPriceToCurrentList("Wall Plate", "2-Gang Double Round" ,1);
 			message = "Drayer Circuit";
 			break;
 		case 3:
@@ -1033,6 +1050,7 @@ public class EstimateTool{
 			addPriceToCurrentList("Wire", "12-2",  100);
 			addPriceToCurrentList("Receptacle", "Duplex", 1);
 			addPriceToCurrentList("1-gang box", "Old/New Work", 1);
+			addPriceToCurrentList("Wall Plate", "1-Gang Outlet",1);
 			message = "Washer Circuit";
 			break;
 		case 4:
@@ -1040,6 +1058,7 @@ public class EstimateTool{
 			addPriceToCurrentList("Wire", "14-2", 100);
 			addPriceToCurrentList("Receptacle", "Duplex", 1);
 			addPriceToCurrentList("1-gang box", "Old/New Work", 1);
+			addPriceToCurrentList("Wall Plate", "1-Gang Outlet",1);
 			message = "Diswasher Circuit";
 			break;
 		case 5:
@@ -1051,7 +1070,8 @@ public class EstimateTool{
 			addPriceToCurrentList("Circuit Breaker", "50-Amp 2-Pole", 1);
 			addPriceToCurrentList("Wire", "6-3", 100);
 			addPriceToCurrentList("Receptacle", "50A 125/250", 1);
-			addPriceToCurrentList("2-gang box", "Old/New Work", 1);		
+			addPriceToCurrentList("2-gang box", "Old/New Work", 1);
+			addPriceToCurrentList("Wall Plate", "2-Gang Double Round",1);
 			message = "Range Circuit";
 			break;
 		case 7:
@@ -1059,6 +1079,7 @@ public class EstimateTool{
 			addPriceToCurrentList("Wire", "6-3", 100);
 			addPriceToCurrentList("Receptacle", "50A 125/250", 1);
 			addPriceToCurrentList("1-gang box", "Old/New Work", 1);
+			addPriceToCurrentList("Wall Plate", "2-Gang Double Round ",1);
 			message = "EV Charger Circuit";		
 			break;
 		case 8:
