@@ -118,7 +118,7 @@ public class ElectricianApp extends Application {
 		SettingsManager sm = new SettingsManager(ui, favorites, 
 				history, notes);
 		ui.setSettingsManager(sm);
-		ui.setTools(favorites, ohms, circuits, estimate, calculator, 
+		ui.setTools(favorites, ohms, circuits, calculator, 
 				history, notes);
 		ui.loadSettings();
 		//ui.setTools(favorites, ohms, circuits, voltage, estimate, calculator, 
