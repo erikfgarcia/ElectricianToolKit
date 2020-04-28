@@ -81,8 +81,8 @@ public class ElectricianApp extends Application {
 		circuitsDrop.add(circuits);
 		
 		FilteredDropDown voltageDrop = new FilteredDropDown("Voltage Drop", ui);
-		//VoltageDropTool voltage = new VoltageDropTool(ui);
-		//voltageDropDrop.add(circuits);
+		VoltageDropTool voltage = new VoltageDropTool(ui);
+		voltageDrop.add(voltage);
 		
 		EstimateTool estimate = new EstimateTool(ui);
 		Button estimateDrop = new Button("Estimates");

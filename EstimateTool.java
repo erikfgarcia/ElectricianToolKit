@@ -73,7 +73,7 @@ public class EstimateTool extends Pane{
 	static String url = "jdbc:mysql://localhost:3306/" + databaseName + "?useSSL=false";
 	static String url2 = "jdbc:mysql://localhost:3306/" + databaseName2 + "?useSSL=false";
 	static String username = "root";
-	static String password = "4050lsDF."; //database password
+	static String password = "********"; //database password
 	UIManager ui; // set scene from main program  
 	
 	/**
@@ -860,16 +860,17 @@ public class EstimateTool extends Pane{
 		});
 		message2 = "Total: $"+total;
 		total = 0.00;
-		Text text = new Text(20, 20, message);
-		Text text2 = new Text(20, 20, message2);
-		Text text3 = new Text(20, 20,"You may also need: wire connectors, staples, tape, swithes, wire crimps, ligth bulbs");
+		Text text = new Text(20, 20, "SAVED LISTS");
+		Text text2 = new Text(20, 20, message);
+		Text text3 = new Text(20, 20, message2);
+		Text text4 = new Text(20, 20,"You may also need: wire connectors, staples, tape, swithes, wire crimps, ligth bulbs");
 		text.setId("estText");
 		text2.setId("estText");
 		VBox layout = new VBox(5);
 		//layout.setAlignment(Pos.CENTER);
 		layout.getStylesheets().add(STYLE);
 		layout.setId("estBackground");
-		layout.getChildren().addAll(text,table, text2, text3, next, back, back2);
+		layout.getChildren().addAll(text, text2,table, text3, text4, next, back, back2);
 		//scene9 = new Scene(layout, WIDTH, HEIGHT);
 		//primaryStage.setScene(scene8);
 		scene9 = new Scene(layout);
