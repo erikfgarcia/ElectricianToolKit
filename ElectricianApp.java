@@ -7,8 +7,8 @@
  * 
  * Errors/Requirements:
  * 		- scroll bars being cut out of window [Partially fixed]
- * 		- make voltage-drop tools
  * 		- refine UI
+ * 		- finish info section
  * 
  */
 
@@ -87,7 +87,7 @@ public class ElectricianApp extends Application {
 		EstimateTool estimate = new EstimateTool(ui);
 		Button estimateDrop = new Button("Estimates");
 		estimateDrop.setId("DropButton");
-		estimateDrop.setPrefSize(400, 60);
+		estimateDrop.setPrefSize(490, 60);
 	    estimateDrop.setOnAction(e-> {		
 			ui.setScene(estimate.getPrimaryScene());	
 	    	//ui.setScene(new StyledScene(new ExternalPage(ui, estimate)).getScene());
@@ -117,12 +117,11 @@ public class ElectricianApp extends Application {
 		
 		SettingsManager sm = new SettingsManager(ui, favorites, 
 				history, notes);
-		ui.setSettingsManager(sm);
-		ui.setTools(favorites, ohms, circuits, calculator, 
+		ui.setTools(favorites, ohms, circuits, voltage, calculator, 
 				history, notes);
+		ui.setSettingsManager(sm);
 		ui.loadSettings();
-		//ui.setTools(favorites, ohms, circuits, voltage, estimate, calculator, 
-		//		history, notes);
+		
 		
 		
 		MainBar mainBar = new MainBar(ui);
@@ -142,10 +141,10 @@ public class ElectricianApp extends Application {
 		//StyledScene mainScene = new StyledScene(mainBar, mainScroll);
 		
 		// initial size of program window
-		primaryStage.setWidth(630);
+		primaryStage.setWidth(720);
 		primaryStage.setHeight(740);
-		primaryStage.setMinWidth(300);
-		primaryStage.setMinHeight(200);
+		primaryStage.setMinWidth(500);
+		primaryStage.setMinHeight(300);
 		
 		outermostBox.prefWidthProperty().bind(primaryStage.widthProperty().subtract(13.5));
 		outermostBox.prefHeightProperty().bind(primaryStage.heightProperty().subtract(13.5));
@@ -274,8 +273,8 @@ class UIManager {
 		else if(name.equals("Circuits")) {
 			return new CircuitsTool(this);
 		}
-		else if(name.equals("Voltage Drop")) {
-			//return new VoltageDropTool(this);
+		else if(name.equals("Voltage Drop Calculator")) {
+			return new VoltageDropTool(this);
 		}
 		
 		return null;
@@ -284,7 +283,7 @@ class UIManager {
 	public String[] getToolNames() {
 		String[] names = {"Ohm's Law",
 				"Circuits",
-				"Voltage Drop",
+				"Voltage Drop Calculator",
 				"Calculator"};
 		
 		return names;
@@ -368,7 +367,7 @@ class DropDown extends Region {
 		
 		button= new Button(name);
 		button.setId("DropButton");
-		button.setPrefSize(400, 60);
+		button.setPrefSize(490, 60);
 		
 		button.setOnAction(defaultClick);
 		
@@ -734,6 +733,17 @@ class MainBar extends ToolBar {
 				+ " from compatible tools (sub-tools)"));
 		infoNotes.getChildren().add(new InfoText("Notes: basic note pad to freely"
 				+ " write to"));
+		infoNotes.getChildren().add(new InfoText("Estimate: give practical estimates"
+				+ " for a variety of different situations and circuit types"));
+		infoNotes.getChildren().add(new InfoText("Ohm's Law: use various "
+				+ "interpretations of Ohm's Law to calculate values of resistance,"
+				+ " voltage, current, and power"));
+		infoNotes.getChildren().add(new InfoText("Circuits: calculate equivalent "
+				+ "component given two component values for either "
+				+ "series or parallel circuits"));
+		infoNotes.getChildren().add(new InfoText("Voltage Drop: estimate voltage "
+				+ "drop in a circuuit based on various parameters such as"
+				+ " material, wire length, and current"));
 		//infoNotes.getChildren().add(new InfoText(""));
 		
 		Button info = new Button("Info");
