@@ -36,11 +36,11 @@ public class VoltageDropTool extends Tool{
 	TextField fieldWireDiameter;
 	TextField fieldCurrent;
 	TextField fieldVoltageLoad;
-	Label voltDropResult;
 	ChoiceBox<String> matBox;
 	ChoiceBox<String> lenBox;
 	//ChoiceBox<String> diamBox;
 	Button buttonCalculate;
+	Label voltDropResult;
 	
 	
 	public VoltageDropTool(UIManager ui) {
@@ -54,7 +54,7 @@ public class VoltageDropTool extends Tool{
 		Label labelWireMaterial = new Label("Wire Material");
 		Label labelWireLength = new Label("Enter Wire Length");
 		Label labelLengthUnits = new Label("Units");
-		Label labelWireDiameter = new Label("Enter Wire Diameter");
+		Label labelWireDiameter = new Label("Enter Wire Diameter (cmil)");
 		Label labelCurrent = new Label("Enter Current");
 		
 		voltDropResult = new Label();
@@ -67,16 +67,7 @@ public class VoltageDropTool extends Tool{
 		lenBox.getItems().addAll("feet", "meters");
 		
 		buttonCalculate = new Button("Calculate");
-		buttonCalculate.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					//
-				}
-				catch(Exception ex) {
-					voltDropResult.setText("ERROR");
-				}
-			}
-		});
+		
 		
 		HBox hMaterial = new HBox(labelWireMaterial, matBox);
 		hMaterial.setSpacing(5);
@@ -89,14 +80,99 @@ public class VoltageDropTool extends Tool{
 		HBox hButtons = new HBox(buttonCalculate);
 		hButtons.setSpacing(5);
 		HBox output = new HBox(voltDropResult);
+		output.setSpacing(5);
 		
-		VBox fieldsVertical = new VBox(hMaterial, hLength, hDiameter, hCurrent, hButtons);
+		VBox fieldsVertical = new VBox(hMaterial, hLength, hDiameter, hCurrent, hButtons, output);
 		fieldsVertical.setSpacing(5);
 		
 		VBox outerWrap = new VBox(fieldsVertical);
         VBox.setMargin(fieldsVertical, new Insets(10, 10, 10, 10));
 
         this.getChildren().add(outerWrap);
+        
+        buttonCalculate.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					String strMaterial, strUnits;
+					double wireLength, wireDiameter, current;
+					
+					if (matBox.getValue() != null) {
+						strMaterial = matBox.getValue();
+						//System.out.println(strMaterial);
+					}
+					else {
+						//ERROR
+						voltDropResult.setText("Please select a wire material");
+						return;
+					}
+					if (lenBox.getValue() != null) {
+						strUnits = lenBox.getValue();
+						//System.out.println(strUnits);
+					}
+					else {
+						//ERROR
+						voltDropResult.setText("Please select a measurement unit for length");
+						return;
+					}
+					
+					if (fieldWireLength != null) {
+						wireLength = Double.parseDouble(fieldWireLength.getText());
+						//System.out.println(wireLength);
+					}
+					else {
+						//ERROR
+						voltDropResult.setText("Please enter a wire length");
+						return;
+					}
+					if (fieldWireDiameter != null) {
+						wireDiameter = Double.parseDouble(fieldWireDiameter.getText());
+						//System.out.println(wireDiameter);
+					}
+					else {
+						//ERROR
+						voltDropResult.setText("Please enter a wire diameter");
+						return;
+					}
+					if (fieldCurrent != null) {
+						current = Double.parseDouble(fieldCurrent.getText());
+						//System.out.println(current);
+					}
+					else {
+						//ERROR
+						voltDropResult.setText("Please enter the current");
+						return;
+					}
+					
+					//VD = 2 * K * D * I / CM
+					
+					//Set material K constant
+					double k, d, vd;
+					if (strMaterial.equals("Copper")){
+						k = 12.9;
+						//System.out.println("k value for copper:" + k);
+					}
+					else {
+						k = 21.2;
+						//System.out.println("k value for aluminum:" + k);
+					}
+					
+					//convert units to feet
+					if (strUnits.equals("meters")) {
+						d = wireLength * 3.28084;
+						//System.out.println(wireLength + "Meters converted to "+ d +" feet.");	
+					}
+					else {
+						d = wireLength;
+					}
+					
+					vd = 2 * k * d * current / wireDiameter;
+					voltDropResult.setText("Voltage drop: " + String.valueOf(vd));
+				}
+				catch(Exception ex) {
+					voltDropResult.setText("ERROR");
+				}
+			}
+		});
 		
 	}
 
@@ -105,13 +181,13 @@ public class VoltageDropTool extends Tool{
 	}
 
 	public String printResult() {
-		return ("testVoltageDrop");
+		return (voltDropResult.getText());
+	}
+	
+	public void clearDisplay() {
+		
 	}
 
-	public void clearDisplay() {
-		fieldWireLength.clear();
-		fieldWireDiameter.clear();
-		fieldCurrent.clear();
-	}
+	
 
 }
