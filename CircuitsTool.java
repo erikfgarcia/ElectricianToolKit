@@ -69,153 +69,143 @@ public class CircuitsTool extends Tool {
 
     public CircuitsTool(UIManager ui) {
         super(ui);
-        scInput1 = new TextField();
-        scInput2 = new TextField();
-        srInput1 = new TextField();
-        srInput2 = new TextField();
-        pcInput1 = new TextField();
-        pcInput2 = new TextField();
-        prInput1 = new TextField();
-        prInput2 = new TextField();
-        series = new Label("Series");
-        series.setTextFill(Color.web("#CD5C5C"));
-        scLabel = new Label("Capacitance: Enter two capacitors.");
-        srLabel = new Label("Resistance/Inductance: Enter two resistors or inductors.");
-        parallel = new Label("Parallel");
-        parallel.setTextFill(Color.web("#CD5C5C"));
-        pcLabel = new Label("Capacitance: Enter two capacitors.");
-        prLabel = new Label("Resistance/Inductance: Enter two resistors or inductors.");
-        scResult = new Label();
-        scResult.setTextFill(Color.web("#0076a3"));
-        srResult = new Label();
-        srResult.setTextFill(Color.web("#0076a3"));
-        pcResult = new Label();
-        pcResult.setTextFill(Color.web("#0076a3"));
-        prResult = new Label();
-        prResult.setTextFill(Color.web("#0076a3"));
+        if (ui != null) {
+            scInput1 = new TextField();
+            scInput2 = new TextField();
+            srInput1 = new TextField();
+            srInput2 = new TextField();
+            pcInput1 = new TextField();
+            pcInput2 = new TextField();
+            prInput1 = new TextField();
+            prInput2 = new TextField();
+            series = new Label("Series");
+            series.setTextFill(Color.web("#CD5C5C"));
+            scLabel = new Label("Capacitance: Enter two capacitors.");
+            srLabel = new Label("Resistance/Inductance: Enter two resistors or inductors.");
+            parallel = new Label("Parallel");
+            parallel.setTextFill(Color.web("#CD5C5C"));
+            pcLabel = new Label("Capacitance: Enter two capacitors.");
+            prLabel = new Label("Resistance/Inductance: Enter two resistors or inductors.");
+            scResult = new Label();
+            scResult.setTextFill(Color.web("#0076a3"));
+            srResult = new Label();
+            srResult.setTextFill(Color.web("#0076a3"));
+            pcResult = new Label();
+            pcResult.setTextFill(Color.web("#0076a3"));
+            prResult = new Label();
+            prResult.setTextFill(Color.web("#0076a3"));
 
-        calc1 = new Button("Calculate");
-        calc1.setOnAction(e -> {
-            if ((scInput1.getText().trim().isEmpty()) || (scInput2.getText().trim().isEmpty())) {
-                scResult.setText("Error! Must enter two values.");
-            }
-            else if (!(isNum(scInput1.getText()) && isNum(scInput2.getText()))) {
-                scResult.setText("Error! Symbols were entered.");
-            }
-            else if ((Double.parseDouble(scInput1.getText()) == 0.0) || (Double.parseDouble(scInput2.getText()) == 0.0)){
-                scResult.setText("Error! Zeros were entered.");
-            }
-            else {
-                double input1 = Double.parseDouble(scInput1.getText());
-                double input2 = Double.parseDouble(scInput2.getText());
-                scResult.setText("Capacitance = " + Double.toString(seriesCapacitance(input1,input2)));
-                scSave = scResult.getText();
-            }
-        });
+            calc1 = new Button("Calculate");
+            calc1.setOnAction(e -> {
+                if ((scInput1.getText().trim().isEmpty()) || (scInput2.getText().trim().isEmpty())) {
+                    scResult.setText("Error! Must enter two values.");
+                } else if (!(isNum(scInput1.getText()) && isNum(scInput2.getText()))) {
+                    scResult.setText("Error! Symbols were entered.");
+                } else if ((Double.parseDouble(scInput1.getText()) == 0.0) || (Double.parseDouble(scInput2.getText()) == 0.0)) {
+                    scResult.setText("Error! Zeros were entered.");
+                } else {
+                    double input1 = Double.parseDouble(scInput1.getText());
+                    double input2 = Double.parseDouble(scInput2.getText());
+                    scResult.setText("Capacitance = " + Double.toString(seriesCapacitance(input1, input2)));
+                    scSave = scResult.getText();
+                }
+            });
 
-        calc2 = new Button("Calculate");
-        calc2.setOnAction(e -> {
-            if ((srInput1.getText().trim().isEmpty()) || (srInput2.getText().trim().isEmpty())) {
-                srResult.setText("Error! Must enter two values.");
-            }
-            else if (!(isNum(srInput1.getText()) && isNum(srInput2.getText()))) {
-                srResult.setText("Error! Symbols were entered.");
-            }
-            else if ((Double.parseDouble(srInput1.getText()) == 0.0) || (Double.parseDouble(srInput2.getText()) == 0.0)){
-                srResult.setText("Error! Zeros were entered.");
-            }
-            else {
-                double input1 = Double.parseDouble(srInput1.getText());
-                double input2 = Double.parseDouble(srInput2.getText());
-                srResult.setText("Resistance/Inductance = " + Double.toString(seriesResistance(input1,input2)));
-                srSave = srResult.getText();
-            }
-        });
+            calc2 = new Button("Calculate");
+            calc2.setOnAction(e -> {
+                if ((srInput1.getText().trim().isEmpty()) || (srInput2.getText().trim().isEmpty())) {
+                    srResult.setText("Error! Must enter two values.");
+                } else if (!(isNum(srInput1.getText()) && isNum(srInput2.getText()))) {
+                    srResult.setText("Error! Symbols were entered.");
+                } else if ((Double.parseDouble(srInput1.getText()) == 0.0) || (Double.parseDouble(srInput2.getText()) == 0.0)) {
+                    srResult.setText("Error! Zeros were entered.");
+                } else {
+                    double input1 = Double.parseDouble(srInput1.getText());
+                    double input2 = Double.parseDouble(srInput2.getText());
+                    srResult.setText("Resistance/Inductance = " + Double.toString(seriesResistance(input1, input2)));
+                    srSave = srResult.getText();
+                }
+            });
 
-        calc3 = new Button("Calculate");
-        calc3.setOnAction(e -> {
-            if ((pcInput1.getText().trim().isEmpty()) || (pcInput2.getText().trim().isEmpty())) {
-                pcResult.setText("Error! Must enter two values.");
-            }
-            else if (!(isNum(pcInput1.getText()) && isNum(pcInput2.getText()))) {
-                pcResult.setText("Error! Symbols were entered.");
-            }
-            else if ((Double.parseDouble(pcInput1.getText()) == 0.0) || (Double.parseDouble(pcInput2.getText()) == 0.0)){
-                pcResult.setText("Error! Zeros were entered.");
-            }
-            else {
-                double input1 = Double.parseDouble(pcInput1.getText());
-                double input2 = Double.parseDouble(pcInput2.getText());
-                pcResult.setText("Capacitance = " + Double.toString(parallelCapacitance(input1,input2)));
-                pcSave = pcResult.getText();
-            }
-        });
+            calc3 = new Button("Calculate");
+            calc3.setOnAction(e -> {
+                if ((pcInput1.getText().trim().isEmpty()) || (pcInput2.getText().trim().isEmpty())) {
+                    pcResult.setText("Error! Must enter two values.");
+                } else if (!(isNum(pcInput1.getText()) && isNum(pcInput2.getText()))) {
+                    pcResult.setText("Error! Symbols were entered.");
+                } else if ((Double.parseDouble(pcInput1.getText()) == 0.0) || (Double.parseDouble(pcInput2.getText()) == 0.0)) {
+                    pcResult.setText("Error! Zeros were entered.");
+                } else {
+                    double input1 = Double.parseDouble(pcInput1.getText());
+                    double input2 = Double.parseDouble(pcInput2.getText());
+                    pcResult.setText("Capacitance = " + Double.toString(parallelCapacitance(input1, input2)));
+                    pcSave = pcResult.getText();
+                }
+            });
 
-        calc4 = new Button("Calculate");
-        calc4.setOnAction(e -> {
-            if ((prInput1.getText().trim().isEmpty()) || (prInput2.getText().trim().isEmpty())) {
-                prResult.setText("Error! Must enter two values.");
-            }
-            else if (!(isNum(prInput1.getText()) && isNum(prInput2.getText()))) {
-                prResult.setText("Error! Symbols were entered.");
-            }
-            else if ((Double.parseDouble(prInput1.getText()) == 0.0) || (Double.parseDouble(prInput2.getText()) == 0.0)){
-                prResult.setText("Error! Zeros were entered.");
-            }
-            else {
-                double input1 = Double.parseDouble(prInput1.getText());
-                double input2 = Double.parseDouble(prInput2.getText());
-                prResult.setText("Resistance/Inductance = " + Double.toString(parallelResistance(input1,input2)));
-                prSave = prResult.getText();
-            }
-        });
+            calc4 = new Button("Calculate");
+            calc4.setOnAction(e -> {
+                if ((prInput1.getText().trim().isEmpty()) || (prInput2.getText().trim().isEmpty())) {
+                    prResult.setText("Error! Must enter two values.");
+                } else if (!(isNum(prInput1.getText()) && isNum(prInput2.getText()))) {
+                    prResult.setText("Error! Symbols were entered.");
+                } else if ((Double.parseDouble(prInput1.getText()) == 0.0) || (Double.parseDouble(prInput2.getText()) == 0.0)) {
+                    prResult.setText("Error! Zeros were entered.");
+                } else {
+                    double input1 = Double.parseDouble(prInput1.getText());
+                    double input2 = Double.parseDouble(prInput2.getText());
+                    prResult.setText("Resistance/Inductance = " + Double.toString(parallelResistance(input1, input2)));
+                    prSave = prResult.getText();
+                }
+            });
 
-        print1 = new Button("Print");
-        print1.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                printToHistory();
-            }
-        });
+            print1 = new Button("Print");
+            print1.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    printToHistory();
+                }
+            });
 
-        print2 = new Button("Print");
-        print2.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                printToHistory();
-            }
-        });
+            print2 = new Button("Print");
+            print2.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    printToHistory();
+                }
+            });
 
-        print3 = new Button("Print");
-        print3.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                printToHistory();
-            }
-        });
+            print3 = new Button("Print");
+            print3.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    printToHistory();
+                }
+            });
 
-        print4 = new Button("Print");
-        print4.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                printToHistory();
-            }
-        });
+            print4 = new Button("Print");
+            print4.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    printToHistory();
+                }
+            });
 
-        HBox boxOne = new HBox(scInput1, scInput2, calc1, print1);
-        boxOne.setSpacing(3);
+            HBox boxOne = new HBox(scInput1, scInput2, calc1, print1);
+            boxOne.setSpacing(3);
 
-        HBox boxTwo = new HBox(srInput1, srInput2, calc2, print2);
-        boxTwo.setSpacing(3);
+            HBox boxTwo = new HBox(srInput1, srInput2, calc2, print2);
+            boxTwo.setSpacing(3);
 
-        HBox boxThree = new HBox(pcInput1, pcInput2, calc3, print3);
-        boxThree.setSpacing(3);
+            HBox boxThree = new HBox(pcInput1, pcInput2, calc3, print3);
+            boxThree.setSpacing(3);
 
-        HBox boxFour = new HBox(prInput1, prInput2, calc4, print4);
-        boxFour.setSpacing(3);
+            HBox boxFour = new HBox(prInput1, prInput2, calc4, print4);
+            boxFour.setSpacing(3);
 
-        VBox outerBox = new VBox(series, scLabel, boxOne, scResult, srLabel, boxTwo, srResult, parallel, pcLabel, boxThree, pcResult, prLabel, boxFour, prResult);
-        outerBox.setSpacing(5);
+            VBox outerBox = new VBox(series, scLabel, boxOne, scResult, srLabel, boxTwo, srResult, parallel, pcLabel, boxThree, pcResult, prLabel, boxFour, prResult);
+            outerBox.setSpacing(5);
 
-        VBox outerWrap = new VBox(outerBox);
-        VBox.setMargin(outerBox, new Insets(10, 10, 10, 10));
-        this.getChildren().add(outerWrap);
+            VBox outerWrap = new VBox(outerBox);
+            VBox.setMargin(outerBox, new Insets(10, 10, 10, 10));
+            this.getChildren().add(outerWrap);
+        }
     }
     public String getToolName() {
         return name;
