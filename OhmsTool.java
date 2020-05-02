@@ -51,127 +51,120 @@ public class OhmsTool extends Tool {
     int blankCount;
 
     public OhmsTool(UIManager ui) {
-        super(ui);
-        vInput = new TextField();
-        cInput = new TextField();
-        rInput = new TextField();
-        pInput = new TextField();
+            super(ui);
+            if (ui != null) {
+                vInput = new TextField();
+                cInput = new TextField();
+                rInput = new TextField();
+                pInput = new TextField();
 
-        vInput.insertText(0,"");
-        cInput.insertText(0,"");
-        rInput.insertText(0,"");
-        pInput.insertText(0,"");
-        Label directions = new Label("Enter 2 or 3 values.");
+                vInput.insertText(0, "");
+                cInput.insertText(0, "");
+                rInput.insertText(0, "");
+                pInput.insertText(0, "");
+                Label directions = new Label("Enter 2 or 3 values.");
 
-        Label vLabel = new Label("Voltage");
-        Label cLabel = new Label("Current");
-        Label rLabel = new Label("Resistance");
-        Label pLabel = new Label("Power");
+                Label vLabel = new Label("Voltage");
+                Label cLabel = new Label("Current");
+                Label rLabel = new Label("Resistance");
+                Label pLabel = new Label("Power");
 
-        vResult = new Label();
-        cResult = new Label();
-        rResult = new Label();
-        pResult = new Label();
-        blankCount = 0;
-
-
-        calc = new Button("Calculate");
-        calc.setOnAction(e -> {
+                vResult = new Label();
+                cResult = new Label();
+                rResult = new Label();
+                pResult = new Label();
                 blankCount = 0;
-                directions.setText("Enter 2 or 3 values.");
-                enteredNums = new ArrayList<Double>();
-                if (vInput.getText().trim().isEmpty()) {
-                    enteredNums.add(0.0);
-                    blankCount += 1;
-                }
-                else if (!(isNum(vInput.getText()))) {
-                    directions.setText("Error! Only numerical values (excluding zero) can be entered.");
-                }
-                else {
-                    enteredNums.add(Double.parseDouble(vInput.getText()));
-                }
-                if (cInput.getText().trim().isEmpty()) {
-                    enteredNums.add(0.0);
-                    blankCount += 1;
-                }
-                else if (!(isNum(cInput.getText()))) {
-                    directions.setText("Error! Only numerical values (excluding zero) can be entered.");
-                }
-                else {
-                    enteredNums.add(Double.parseDouble(cInput.getText()));
-                }
-                if (rInput.getText().trim().isEmpty()) {
-                    enteredNums.add(0.0);
-                    blankCount += 1;
-                }
-                else if (!(isNum(rInput.getText()))) {
-                    directions.setText("Error! Only numerical values (excluding zero) can be entered.");
-                }
-                else {
-                    enteredNums.add(Double.parseDouble(rInput.getText()));
-                }
-                if (pInput.getText().trim().isEmpty()) {
-                    enteredNums.add(0.0);
-                    blankCount += 1;
-                }
-                else if (!(isNum(pInput.getText()))) {
-                    directions.setText("Error! Only numerical values (excluding zero) can be entered.");
-                }
-                else {
-                    enteredNums.add(Double.parseDouble(pInput.getText()));
-                }
 
-                newNums = new ArrayList<Double>();
-                if (directions.getText() != "Error! Only numerical values (excluding zero) can be entered.") {
-                    try {
-                        if (blankCount == 4) {
-                            directions.setText("Error! No values were entered.");
-                        }
-                        else {
-                            newNums = OhmsLawCalculator(enteredNums.get(0), enteredNums.get(1), enteredNums.get(2), enteredNums.get(3));
-                            directions.setText("Resulting Values: ");
-                            vResult.setText("= " + Double.toString(newNums.get(0)));
-                            cResult.setText("= " + Double.toString(newNums.get(1)));
-                            rResult.setText("= " + Double.toString(newNums.get(2)));
-                            pResult.setText("= " + Double.toString(newNums.get(3)));
+
+                calc = new Button("Calculate");
+                calc.setOnAction(e -> {
+                    blankCount = 0;
+                    directions.setText("Enter 2 or 3 values.");
+                    enteredNums = new ArrayList<Double>();
+                    if (vInput.getText().trim().isEmpty()) {
+                        enteredNums.add(0.0);
+                        blankCount += 1;
+                    } else if (!(isNum(vInput.getText()))) {
+                        directions.setText("Error! Only numerical values (excluding zero) can be entered.");
+                    } else {
+                        enteredNums.add(Double.parseDouble(vInput.getText()));
+                    }
+                    if (cInput.getText().trim().isEmpty()) {
+                        enteredNums.add(0.0);
+                        blankCount += 1;
+                    } else if (!(isNum(cInput.getText()))) {
+                        directions.setText("Error! Only numerical values (excluding zero) can be entered.");
+                    } else {
+                        enteredNums.add(Double.parseDouble(cInput.getText()));
+                    }
+                    if (rInput.getText().trim().isEmpty()) {
+                        enteredNums.add(0.0);
+                        blankCount += 1;
+                    } else if (!(isNum(rInput.getText()))) {
+                        directions.setText("Error! Only numerical values (excluding zero) can be entered.");
+                    } else {
+                        enteredNums.add(Double.parseDouble(rInput.getText()));
+                    }
+                    if (pInput.getText().trim().isEmpty()) {
+                        enteredNums.add(0.0);
+                        blankCount += 1;
+                    } else if (!(isNum(pInput.getText()))) {
+                        directions.setText("Error! Only numerical values (excluding zero) can be entered.");
+                    } else {
+                        enteredNums.add(Double.parseDouble(pInput.getText()));
+                    }
+
+                    newNums = new ArrayList<Double>();
+                    if (directions.getText() != "Error! Only numerical values (excluding zero) can be entered.") {
+                        try {
+                            if (blankCount == 4) {
+                                directions.setText("Error! No values were entered.");
+                            } else {
+                                newNums = OhmsLawCalculator(enteredNums.get(0), enteredNums.get(1), enteredNums.get(2), enteredNums.get(3));
+                                directions.setText("Resulting Values: ");
+                                vResult.setText("= " + Double.toString(newNums.get(0)));
+                                cResult.setText("= " + Double.toString(newNums.get(1)));
+                                rResult.setText("= " + Double.toString(newNums.get(2)));
+                                pResult.setText("= " + Double.toString(newNums.get(3)));
+                            }
+                        } catch (Exception ex) {
+                            directions.setText("Error! One or four values were entered. Try again.");
                         }
                     }
-                    catch (Exception ex) {
-                        directions.setText("Error! One or four values were entered. Try again.");
+                });
+
+
+                print = new Button("Print");
+                print.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e) {
+                        printToHistory();
                     }
-                }
-        });
+                });
+                ;
 
+                HBox boxOne = new HBox(vLabel, vInput, vResult);
+                boxOne.setSpacing(5);
 
-        print = new Button("Print");
-        print.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                printToHistory();
+                HBox boxTwo = new HBox(cLabel, cInput, cResult);
+                boxTwo.setSpacing(5);
+
+                HBox boxThree = new HBox(rLabel, rInput, rResult);
+                boxThree.setSpacing(5);
+
+                HBox boxFour = new HBox(pLabel, pInput, pResult);
+                boxFour.setSpacing(5);
+
+                HBox buttons = new HBox(calc, print);
+                buttons.setSpacing(5);
+
+                VBox outerBox = new VBox(directions, boxOne, boxTwo, boxThree, boxFour, buttons);
+                outerBox.setSpacing(5);
+
+                VBox outerWrap = new VBox(outerBox);
+                VBox.setMargin(outerBox, new Insets(10, 10, 10, 10));
+
+                this.getChildren().add(outerWrap);
             }
-        });;
-
-        HBox boxOne = new HBox(vLabel, vInput, vResult);
-        boxOne.setSpacing(5);
-
-        HBox boxTwo = new HBox(cLabel, cInput, cResult);
-        boxTwo.setSpacing(5);
-
-        HBox boxThree = new HBox(rLabel, rInput, rResult);
-        boxThree.setSpacing(5);
-
-        HBox boxFour = new HBox(pLabel, pInput, pResult);
-        boxFour.setSpacing(5);
-
-        HBox buttons = new HBox(calc, print);
-        buttons.setSpacing(5);
-
-        VBox outerBox = new VBox(directions, boxOne, boxTwo, boxThree, boxFour, buttons);
-        outerBox.setSpacing(5);
-
-        VBox outerWrap = new VBox(outerBox);
-        VBox.setMargin(outerBox, new Insets(10, 10, 10, 10));
-
-        this.getChildren().add(outerWrap);
     }
     public String getToolName() {
         return name;
