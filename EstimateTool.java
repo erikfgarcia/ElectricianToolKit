@@ -73,7 +73,7 @@ public class EstimateTool extends Pane{
 	static String url = "jdbc:mysql://localhost:3306/" + databaseName + "?useSSL=false";
 	static String url2 = "jdbc:mysql://localhost:3306/" + databaseName2 + "?useSSL=false";
 	static String username = "root";
-	static String password = "********"; //database password
+	static String password = "*******"; //database password
 	UIManager ui; // set scene from main program  
 	
 	/**
@@ -83,7 +83,10 @@ public class EstimateTool extends Pane{
 	public EstimateTool(UIManager ui) {
 		 this.ui = ui;   	
 	}
-	
+	/**
+	 * This method creates user interface
+	 * @return the first scene 
+	 */
 	public Scene  getPrimaryScene() {
 	
 		//-------------------------------------------------//
@@ -186,7 +189,7 @@ public class EstimateTool extends Pane{
 			} else {
 				
 				//with database
-/**/				try {
+/*				try {
 					 if (Integer.parseInt(input1.getText())!=0) {
 						addPriceToCurrentList("Receptacle", "Duplex", Integer.parseInt(input1.getText()));
 						addPriceToCurrentList("1-gang box", "Old/New Work", Integer.parseInt(input1.getText()));
@@ -203,9 +206,9 @@ public class EstimateTool extends Pane{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-/**/				 
-	//without database				 
-/*		if (Integer.parseInt(input1.getText())!=0) {		 
+*/				 
+	//without database	needs database connectivity			 
+/**/		if (Integer.parseInt(input1.getText())!=0) {		 
 			currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(input1.getText())));
 				 total += 0.9 * Integer.parseInt(input1.getText());
 		}
@@ -214,7 +217,7 @@ public class EstimateTool extends Pane{
 			currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(input2.getText())));
 			total += 1.3 * Integer.parseInt(input2.getText());
 		}    
-*/				
+/**/				
 				//primaryStage.setScene(scene3);
 				ui.setScene(scene3);
 			} 
@@ -229,9 +232,6 @@ public class EstimateTool extends Pane{
 		Label receptacles2 = new Label("How many double duplex receptacles?");
 		Label luminaries = new Label("Enter the lighting load sum in watts");
 		VBox layout2 = new VBox(5);
-		//layout2.setAlignment(Pos.CENTER);
-		//layout2.prefWidthProperty().bind(ui.getScene().widthProperty().subtract(13.5));
-		//layout2.prefWidthProperty().bind(ui.getScene().widthProperty().subtract(13.5));
 		layout2.getStylesheets().add(STYLE);
 		layout2.setId("estBackground");
 		layout2.getChildren().addAll(back2, receptacles1, input1, receptacles2, input2, luminaries, input3, submit);
@@ -333,8 +333,8 @@ public class EstimateTool extends Pane{
 					e1.printStackTrace();
 				} 
 				
-				//without database
-/*				if (Integer.parseInt(recNum1.getText())!=0) {		 
+				//without database 
+/**/				if (Integer.parseInt(recNum1.getText())!=0) {		 
 					currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum1.getText())));
 						 total += 0.9 * Integer.parseInt(recNum1.getText());
 				}
@@ -343,9 +343,9 @@ public class EstimateTool extends Pane{
 					currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(recNum2.getText())));
 					total += 1.3 * Integer.parseInt(recNum2.getText());
 				}
-				
-*/				
-/**/				try {
+               // with database	needs database connectivity			
+/**/				
+/*				try {
 					if (applianceBranchCircuit(Integer.parseInt(recNum1.getText()),
 							Integer.parseInt(recNum2.getText())) == 0) {
 						currentList.clear();
@@ -355,7 +355,7 @@ public class EstimateTool extends Pane{
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-/**/			
+*/			
 				showList(ui);
 			}
 		});
@@ -591,7 +591,7 @@ public class EstimateTool extends Pane{
 				} 
 				
 				 //without database 
-/*					if (Integer.parseInt(recNum5.getText())!=0) {		 
+/**/					if (Integer.parseInt(recNum5.getText())!=0) {		 
 						currentList.add(new MaterialList("Receptacle", "Duplex", 0.9 , Integer.parseInt(recNum5.getText())));
 							 total += 0.9 * Integer.parseInt(recNum5.getText());
 					}
@@ -600,9 +600,10 @@ public class EstimateTool extends Pane{
 						currentList.add(new MaterialList("Receptacle", "Double Duplex", 1.3, Integer.parseInt(recNum5.getText())));
 						total += 1.3 * Integer.parseInt(recNum6.getText());
 					} 
-*/
+/**/
 				
-/**/				try {
+				 //with database needs database connectivity	
+/*				try {
 					if (bathLoundry(Integer.parseInt(recNum5.getText()), Integer.parseInt(recNum6.getText()), isBath) == 0) {
 						currentList.clear();
 					}
@@ -611,7 +612,7 @@ public class EstimateTool extends Pane{
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-/**/
+*/
 				showList(ui);
 			}
 
@@ -671,7 +672,8 @@ public class EstimateTool extends Pane{
 			scene10 = new Scene(layout10);
 				
 			return 	scene1;
-			//--------------//
+				
+				//--------------//
 				// show time 
 				//---------------//
 				//primaryStage.setTitle("Electrician Toolkit");
@@ -680,15 +682,8 @@ public class EstimateTool extends Pane{
 	}
 
 	/**
-	 * returns the first scene
-	 * @return
-	 */
-	//public Scene  getPrimaryScene() {
-	//	return 	scene1;
-//	}
-	
-	/**
-	 * 
+	 * This method displays material list, price, and circuit info.
+	 * @param ui user interface from main class
 	 */
 	public static void showList(UIManager ui) {
 
@@ -737,7 +732,7 @@ public class EstimateTool extends Pane{
 		   	
 		});
 
-		Button back = new Button("Go Back to Main Menu");
+		Button back = new Button("Go Back to Estimates");
 		back.setPrefSize(BWIDTH, BHEIGHT);
 		back.setId("estButton");
 		back.setOnAction(e -> {
@@ -765,6 +760,10 @@ public class EstimateTool extends Pane{
 		
 	}
 	
+	/**
+	 * This method displays material list, price, and circuit info store in database.
+	 * @param ui user interface from main class
+	 */
 	public static void showSavedList(UIManager ui) {
 
 		//--------------------------------------------------//
@@ -850,7 +849,7 @@ public class EstimateTool extends Pane{
 			
 		});
 	
-		Button back2 = new Button("Go Back to Main Menu");
+		Button back2 = new Button("Go Back to Estimates");
 		back2.setPrefSize(BWIDTH, BHEIGHT);
 		back2.setId("estButton");
 		back2.setOnAction(e -> {
@@ -885,12 +884,12 @@ public class EstimateTool extends Pane{
 	//-----------------------------------------------------------------------------------------//
 	
 	/**
-	 * 
-	 * @param dT
-	 * @param dD
-	 * @param constantLoad
-	 * @param breakerSide
-	 * @return
+	 * This method returns the minimum number of circuits require based on the circuit load
+	 * @param dT duplex or triplex receptacle quantity.
+	 * @param dD double duplex receptacle quantity
+	 * @param constantLoad load of lighting circuits in watts  
+	 * @param breakerSide overcurrent protection 
+	 * @return minimum number of circuits 
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
@@ -946,24 +945,24 @@ public class EstimateTool extends Pane{
 
 		}
         
-		//with database
-/**/		if(numberOfCircuits!=0) {
+		//with database  needs database connectivity	
+/*		if(numberOfCircuits!=0) {
 			addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	addPriceToCurrentList("Wire", "12-2", temp);}
 			else if(breakerSide == 15) { addPriceToCurrentList("Wire", "14-2", temp);}		
 		}
-/**/		
+*/		
 		//without database
-/*		if(numberOfCircuits!=0) {
+/**/		if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", "" + breakerSide + "-Amp 1-Pole", 8.5, numberOfCircuits));					
 			int temp = 10 *(dT +dD); 
 			temp +=  (int) (0.1* (double)constantLoad);
 			if(breakerSide == 20) {	currentList.add(new MaterialList("Wire", "12-2", 0.23, temp)); total += 0.23*temp;}
 			else if(breakerSide == 15) { currentList.add(new MaterialList("Wire", "14-2", 0.3, temp)); total += 0.23*temp;}	
 		} 
-*/
+/**/
 		message = "Total circuits: " + numberOfCircuits + "  Ligth circuits: " + numOfLighCircuit
 				+ "  Receptacle Circuits: " + numOfRecCircuit + "  Mixed circuits: " + mixCir;	
 
@@ -971,10 +970,10 @@ public class EstimateTool extends Pane{
 	}
 
 	/**
-	 * 
-	 * @param dT
-	 * @param dD
-	 * @return
+	 * This method returns the minimum number of circuits require based on the circuit load
+	 * @param dT duplex or triplex receptacle quantity.
+	 * @param dD double duplex receptacle quantity
+	 * @return the minimum number of circuits require based on the circuit load
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
@@ -996,28 +995,28 @@ public class EstimateTool extends Pane{
 		if (numberOfCircuits == 1)// Minimum 2 circuits in kitchen
 			numberOfCircuits++;
 
-		//with database 
-/**/		if(numberOfCircuits!=0) {
+		//with database needs database connectivity	
+/*		if(numberOfCircuits!=0) {
 			 addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole", numberOfCircuits);
 			 int temp = 10 *(dT + dD); 
 			 addPriceToCurrentList("Wire", "12-2", temp);
 		 } 
-/**/		 
+*/		 
 		//without database
-/*		 if(numberOfCircuits!=0) {
+/**/		 if(numberOfCircuits!=0) {
 			 currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			 int temp = 10 *(dT + dD); 
 			 currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			 total += 1.3*temp;
 		 } 
-*/			
+/**/			
 		message = "Total circuits: " + numberOfCircuits+ " (Kitchen)";	
 		return numberOfCircuits;
 	}
 
 	/**
-	 * 
-	 * @param brCir
+	 * This method updates current list with info for a particular circuit to be displayed. 
+	 * @param brCir circuit type
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
@@ -1128,8 +1127,8 @@ public class EstimateTool extends Pane{
 		if (totalAmps != 0)
 			numberOfCircuits++;
 		
-		//with database
-/**/		if(isBath) {
+		//with database needs database connectivity	
+/*		if(isBath) {
 			if(numberOfCircuits!=0) {
 				addPriceToCurrentList("Circuit Breaker", breakerSide+"-Amp 1-Pole GFCI",  numberOfCircuits);
 				int temp = 10 *(dT + dD); 
@@ -1144,15 +1143,15 @@ public class EstimateTool extends Pane{
 				bth = "Laundry";
 			}
 		}
-/**/	
+*/	
 		//without database
-/*		if(numberOfCircuits!=0) {
+/**/		if(numberOfCircuits!=0) {
 			currentList.add(new MaterialList("Circuit Breaker", ""+ breakerSide+"-Amp 1-Pole", 8.5, numberOfCircuits));
 			int temp = 10 *(dT + dD);
 			currentList.add(new MaterialList("Wire", "12-2", 1.3, temp));
 			total += 1.3*temp;
 		} 
-*/		
+/**/		
 		message = "Total circuits: " + numberOfCircuits +" ("+bth+")";
 		return numberOfCircuits;
 	}
@@ -1251,7 +1250,7 @@ public class EstimateTool extends Pane{
 				+ "`quantity` INT NOT NULL,"
 				+ "PRIMARY KEY (`item_id`));";
 		
-		System.out.println(st.executeUpdate(query)); // change this 
+		st.executeUpdate(query);  
 		
 		//inserts values into the created table
 		String query2="";			
