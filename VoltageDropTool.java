@@ -49,7 +49,7 @@ public class VoltageDropTool extends Tool{
 		fieldWireLength = new TextField();
 		fieldWireDiameter = new TextField();
 		fieldCurrent = new TextField();
-		fieldVoltageLoad = new TextField();
+		//fieldVoltageLoad = new TextField();
 		
 		Label labelWireMaterial = new Label("Wire Material");
 		Label labelWireLength = new Label("Enter Wire Length");
@@ -143,30 +143,12 @@ public class VoltageDropTool extends Tool{
 						return;
 					}
 					
+					voltDropResult.setText("Voltage drop: " + calculate(strMaterial, strUnits, wireLength, wireDiameter, current));
+					
 					//VD = 2 * K * D * I / CM
 					
-					//Set material K constant
-					double k, d, vd;
-					if (strMaterial.equals("Copper")){
-						k = 12.9;
-						//System.out.println("k value for copper:" + k);
-					}
-					else {
-						k = 21.2;
-						//System.out.println("k value for aluminum:" + k);
-					}
 					
-					//convert units to feet
-					if (strUnits.equals("meters")) {
-						d = wireLength * 3.28084;
-						//System.out.println(wireLength + "Meters converted to "+ d +" feet.");	
-					}
-					else {
-						d = wireLength;
-					}
 					
-					vd = 2 * k * d * current / wireDiameter;
-					voltDropResult.setText("Voltage drop: " + String.valueOf(vd));
 				}
 				catch(Exception ex) {
 					voltDropResult.setText("ERROR");
@@ -175,7 +157,59 @@ public class VoltageDropTool extends Tool{
 		});
 		
 	}
-
+	
+	public static String calculate(String strMaterial, String strUnits, double wireLength, double wireDiameter, double current) {
+		
+		double k, d, vd;
+		if (strMaterial.equals("Copper")){
+			k = 12.9;
+			//System.out.println("k value for copper:" + k);
+		}
+		else if (strMaterial.equals("Aluminum")) {
+			k = 21.2;
+			//System.out.println("k value for aluminum:" + k);
+		}
+		else {
+			return "ERROR";
+		}
+		
+		//convert units to feet
+		if (strUnits.equals("meters")) {
+			d = wireLength * 3.28084;
+			//System.out.println(wireLength + "Meters converted to "+ d +" feet.");	
+		}
+		else if (strUnits.equals("feet")) {
+			d = wireLength;
+		}
+		else {
+			return "ERROR";
+		}
+		
+		vd = 2 * k * d * current / wireDiameter;
+		return String.format("%.4f", vd);
+	}
+	
+	//setters for tests
+	public void setBoxWireMaterial(String material) { //if choicebox string is not valid, box will remain empty
+		matBox.setValue(material);
+	}
+	public void setBoxLengthUnits(String units) {
+		lenBox.setValue(units);
+	}
+	public void setFieldWireLength(String length) {
+		fieldWireLength.setText(length);
+	}
+	public void setFieldWireDiameter(String diameter) {
+		fieldWireDiameter.setText(diameter);
+	}
+	public void setFieldCurrent(String current) {
+		fieldCurrent.setText(current);
+	}
+	
+	public void calculateVoltageDrop() { //press calculate button
+		buttonCalculate.fire();
+	}
+	
 	public String getToolName() {
 		return name;
 	}
@@ -187,6 +221,8 @@ public class VoltageDropTool extends Tool{
 	public void clearDisplay() {
 		
 	}
+	
+	
 
 	
 
